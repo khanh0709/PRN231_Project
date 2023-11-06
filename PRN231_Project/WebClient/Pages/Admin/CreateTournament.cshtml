@@ -1,0 +1,45 @@
+﻿@page
+@using CoFAB.Business.DTO;
+@model CoFAB.Pages.Admin.CreateTournamentModel
+@{
+    Layout = "AdminShared/_Layout";
+}
+<a href="/Admin/Home" class="fab-btn mb-3">Huỷ</a>
+<h1 class="mb-3">Tạo Giải Đấu</h1>
+<form method="post">
+    <label>Tên Giải Đấu*</label>
+    <input name="name" class="form-control mb-3" type="text" required />
+
+    <label>Thể Loại*</label>
+    <select name="typeId" class="custom-select mb-3" required>
+        <option selected>---------</option>
+        @foreach(TypeDTO t in Model.Types)
+        {
+            <option value="@t.TypeId">@t.TypeName</option>
+        }
+    </select>
+
+    <label>Format*</label>
+    <select name="formatId" class="custom-select mb-3" required>
+        <option selected>---------</option>
+        @foreach (FormatDTO f in Model.Formats)
+        {
+            <option value="@f.FormatId">@f.FormatName</option>
+        }
+    </select>
+
+    <label>XP Modifier</label>
+    <input class="form-control mb-3" type="text" name="xpmodifier" value="3.0" required>
+
+    <label>Thời Gian Bắt Đầu*</label>
+    <input class="form-control mb-3" type="datetime-local" name="startTime" required>
+
+    <label>Địa Chỉ Tổ Chức*</label>
+    <input class="form-control mb-3" type="text" name="address" required>
+
+    <label>Mô Tả Giải Đấu</label>
+    <textarea class="form-control mb-3" rows="3" name="description"></textarea>
+
+    <button class="fab-btn" type="submit">Tạo</button>
+</form>
+ 

@@ -1,0 +1,146 @@
+﻿@page
+@using CoFAB.Business.DTO;
+@model CoFAB.Pages.Common.SignUpModel
+
+@{
+    Layout = "CommonShared/_Layout";
+}
+@* <form method="post">
+    <input name="acc" type="text" placeholder="UserName" />
+    <input name="passWord" type="password" placeholder="PassWord" />
+    <button class="btn btn-primary btn-lg btn-block btn-login" type="submit">Login</button>
+</form> *@
+<style>
+    article {
+        background-image: url(https://images.unsplash.com/photo-1544281153-6603be88b354?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmlsbGlhcmR8ZW58MHx8MHx8fDA%3D&w=1000&q=80);
+        /* background-image: url(https://wallpaperaccess.com/full/1727607.jpg); */
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style>
+@Html.AntiForgeryToken()
+<article class="border-st border-st-btm-5">
+    <div class="container py-4 py-lg-5">
+
+        <div class="container">
+            <div class="row no-gutters d-flex flex-column align-items-center">
+                <div class="col-12 col-md-8">
+
+
+                    <style>
+                        .hs-h1 h1 {
+                            margin: 0px;
+                        }
+                    </style>
+                    <div class="d-flex justify-content-center mb-5">
+                        <div class="articles-header hs-h1 d-flex flex-column justify-content-center w-100">
+                            <hr class="white-border">
+                            <h1 class="px-3 px-lg-5 text-center">Đăng ký</h1>
+                            <hr class="white-border">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row no-gutters d-flex flex-column align-items-center pb-4">
+                <div class="col-12 col-md-8 p-3 p-md-5 border-c-2 fab-form-wrapper">
+                    <form method="post" class="fab-form login-form">
+                        <div class="form-group"><label class="font-white" for="fullname">Họ và tên*</label><input type="text" name="acc" autofocus="" autocapitalize="none" autocomplete="fullname" maxlength="254" class="form-control" placeholder="Họ và tên" title="" required id="fullname"></div>
+                        <div class="form-group"><label class="font-white" for="email">Email</label><input type="email" name="email" autofocus="" autocapitalize="none" autocomplete="fullname" maxlength="254" class="form-control" placeholder="Email" title="" required id="email"></div>
+                        <div class="form-group">
+                            <label class="font-white" for="email">Nơi ở</label>
+                            <br>
+                            <select class="form-select" name="city" id="city">
+                                @foreach (Province p in Model.Provinces)
+                                {
+                                    <option value="@p.Code">@p.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group"><label class="font-white" for="authorization">Loại tài khoản</label><input type="text" name="authorization" class="form-control" value="Người chơi" disabled></div>
+                        <div class="form-group">
+                            <label class="font-white" for="acc" style="margin-bottom: 0;">Tài khoản*</label>
+                            <span class="note" style="font-style:italic; color: #ffffffb0; display: block; margin-bottom: 0.5rem">(Không chứa khoảng trắng và kí tự có dấu)</span>
+                            <input type="text" name="acc" autofocus="" autocapitalize="none" autocomplete="username" maxlength="254" class="form-control" placeholder="Tài khoản" title="" required id="acc">
+                        </div>
+                        <div class="form-group"><label class="font-white" for="password">Mật khẩu*</label><input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Mật khẩu" title="" required id="password"></div>
+                        <div class="form-group"><label class="font-white" for="repassword">Xác nhận mật khẩu*</label><input type="password" name="repassword" autocomplete="current-password" class="form-control" placeholder="Xác nhận mật khẩu" title="" required id="repassword"></div>
+                        <h6 id="error" style="color: red"></h6>
+                        <div class="d-flex justify-content-between pt-1 pb-3">
+                            <button type="button" onclick="formSubmit()" class="btn btn-light-blur btn-rounded btn-hover">Đăng ký</button>
+                            <div class="fab-form-actions">
+                                <a class="font-white link" href="/common/login/">Đăng nhập</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</article>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    function formSubmit() {
+        // var formData = new FormData();
+        // formData.append("acc", $("#acc").val());
+        // formData.append("password", $("#password").val());
+        var fullname = $("#fullname").val();
+        var email = $("#email").val();
+        var city = $("#city").val();
+        var acc = $("#acc").val();
+        var pass = $("#password").val();
+        var repass = $("#repassword").val();
+        if (fullname == "") {
+            document.getElementById("error").innerHTML = "Họ và tên không được để trống!";
+            return;
+        }
+        if (acc == "") {
+            document.getElementById("error").innerHTML = "Tài khoản không được để trống!";
+            return;
+        }
+        const pattern = /[^\x00-\x7F]/;
+        const pattern1 = /[\s]/;
+        if (pattern.test(acc) || pattern1.test(acc)) {
+            document.getElementById("error").innerHTML = "Tài khoản chưa đúng định dạng!";
+            return;
+        }
+        if (pass == "") {
+            document.getElementById("error").innerHTML = "Mật khẩu không được để trống!";
+            return;
+        }
+        if (repass == "") {
+            document.getElementById("error").innerHTML = "Xác thực mật khẩu không được để trống!";
+            return;
+        }
+        else {
+            if (repass != pass) {
+                document.getElementById("error").innerHTML = "Xác thực mật khẩu không chính xác!";
+                return;
+            }
+        }
+        $.ajax({
+            url: '/Common/SignUp?handler=Submit',
+            dataType: "json",
+            type: "POST",
+            contentType: 'application/x-www-form-urlencoded',
+            headers:
+            {
+                "RequestVerificationToken": $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            // data: formData,
+            data: { "fullname": fullname, "email": email, "city": city, "acc": acc, "password": pass },
+            success: function (data) {
+                if (data.success)
+                    document.location.href = data.url;
+                else
+                    document.getElementById("error").innerHTML = "Tài khoản đã tồn tại!";
+            },
+            error: function (data) {
+                alert('error');
+            }
+        });
+    }
+</script>

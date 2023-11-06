@@ -1,0 +1,68 @@
+﻿@page
+@using CoFAB.Business.DTO;
+@using CoFAB.Business.Enums;
+@using EnumsNET;
+@model CoFAB.Pages.Admin.HomeModel
+@{
+    Layout = "AdminShared/_Layout";
+}
+<a href="/Admin/CreateTournament" class="fab-btn poppin create-tour">Tạo Giải Đấu</a>
+<div class="tournaments">
+    @foreach(TournamentDTO tour in Model.Tournaments)
+    {
+        <div class="tournament">
+            <h2>@tour.Name</h2>
+            <p>
+                @(((TournamentStatus)tour.Status).AsString(EnumFormat.Description))
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                @tour.Type.TypeName
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                @tour.Format.FormatName
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                @tour.StartTime?.ToString("dd/MM/yyyy HH:mm")
+                <br>
+            </p>
+            @tour.Address
+            <br />
+            <div class="list-btn mt-3">
+                <a href="/Admin/EditInfoTournament?Id=@tour.TournamentId" class="fab-btn">Sửa Thông Tin</a>
+                <a href="/Admin/EditTournament?Id=@tour.TournamentId" class="fab-btn">Sửa Giải Đấu</a>
+                <a 
+                    onclick="DeleteTour(@tour.TournamentId)"
+                    @*href="/Admin/DeleteTournament?Id=@tour.TournamentId" *@
+                    class="fab-btn">Xóa Giải Đấu</a>
+            </div>
+        </div>
+    }
+</div>
+<script>
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+    var DeleteTour = (tourId) => {
+        swalWithBootstrapButtons.fire({
+            title: 'Bạn có muốn xóa giải đấu không?',
+            text: "Không hoàn tác lại giải đấu!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa Giải Đấu!',
+            cancelButtonText: 'Hủy!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.location.href = "/Admin/DeleteTournament?Id=" + tourId;
+            } 
+            else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire(
+                    'Hủy thành công',
+                    'Giải đấu của bạn vẫn tồn tại',
+                    'error'
+                )
+            }
+        })
+    }
+</script>

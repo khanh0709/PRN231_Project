@@ -1,0 +1,38 @@
+﻿@page
+@model CoFAB.Pages.Admin.AddPlayersModel
+@{
+    Layout = "AdminShared/_Layout";
+}
+@Html.AntiForgeryToken()
+<a href="/Admin/EditTournament?Id=@Model.TourId" class="cancel-btn fab-btn mb-3">Trở Về</a>
+<form method="post">
+    <input hidden name="tourId" value="@Model.TourId" />
+    <select name="playerId" id="userSelect" multiple style="width: 100%;">
+    </select>
+    <button class="fab-btn poppin mr-2 disabled mt-2" type="submit">Thêm Người Chơi</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#userSelect').select2({
+            placeholder: 'Tìm và chọn người dùng',
+            multiple: true,
+            ajax: {
+                url: '/Admin/AddPlayers?handler=GetUsers',
+                dataType: 'json',
+                type: "POST",
+                contentType: 'application/x-www-form-urlencoded',
+                headers:
+                {
+                    "RequestVerificationToken": $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
+        });
+    });
+</script>

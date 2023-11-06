@@ -1,0 +1,18 @@
+﻿@page
+@model CoFAB.Pages.Admin.CreateRoundModel
+@{
+    Layout = "AdminShared/_Layout";
+}
+<a href="/Admin/EditTournament?Id=@Model.TourId" class="fab-btn mb-3">Huỷ</a>
+<h1 class="mb-3">Tạo Round</h1>
+<form method="post">
+    <input hidden name="tournamentId" value="@Model.TourId" />
+
+    <label>Tên Round*</label>
+    <input name="roundName" class="form-control mb-3" type="text" required />
+
+    <label>Số Cặp Đấu*</label>
+    <input name="matchNumber" class="form-control mb-3" type="number" name="xpmodifier" required>
+
+    <button class="fab-btn" type="submit">Tạo</button>
+</form>

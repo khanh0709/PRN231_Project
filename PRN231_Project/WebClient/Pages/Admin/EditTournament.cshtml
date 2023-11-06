@@ -1,0 +1,169 @@
+﻿@page
+@using CoFAB.Business.DTO;
+@model CoFAB.Pages.Admin.EditTournamentModel
+@{
+    Layout = "AdminShared/_Layout";
+}
+@Html.AntiForgeryToken()
+<a href="/Admin/Home" class="fab-btn mb-3">Trở Về</a>
+<h1 class="mb-3">@Model.Tournament.Name</h1>
+@*<h4>Thông Tin Giải Đấu</h4>*@
+<div id="pending-players" class="mb-3">
+    <h4>Yêu Cầu Tham Gia</h4>
+    <ol style="max-height: 300px; overflow-y: scroll; border-top: 1px solid #6e4d33; border-bottom: 1px solid #6e4d33; padding: 10px 0 10px 30px;" id="refreshInner">
+        @if(Model.PendingPlayers != null && Model.PendingPlayers.Count > 0)
+        {
+            @foreach(AttempDTO attemp in Model.PendingPlayers)
+            {
+                <li class="pending-item">
+                    <span style="min-width:200px; display:inline-block;">
+                        <span>
+                            @attemp.User.FullName (@attemp.User.UserId)
+                        </span>
+                    </span>
+
+                    <span class="float-right mr-3">
+                        <a onclick="AddPlayer(@attemp.AttempId, this)">
+                            <i class="check-icon bi bi-check-square-fill"></i>
+                        </a>
+                    </span>
+                </li>
+            }
+        }
+    </ol>
+</div>
+<div id="registered-players" class="mb-3">
+    <h4>Người Chơi</h4>
+    <ol style="max-height: 300px; overflow-y: scroll; border-top: 1px solid #6e4d33; border-bottom: 1px solid #6e4d33; padding: 10px 0 10px 30px; list-style-type: decimal;">
+
+        @if (Model.RegisteredPlayers != null && Model.RegisteredPlayers.Count > 0)
+        {
+            @foreach (AttempDTO attemp in Model.RegisteredPlayers)
+            {
+                <li class="pending-item">
+                    <span style="min-width:200px; display:inline-block;">
+                        <span>
+                            @attemp.User.FullName (@attemp.User.UserId)
+                        </span>
+                    </span>
+
+                    <span class="float-right mr-3">
+                        <a onclick="RemovePlayer(@attemp.AttempId, this)">
+                            <i class="close-icon bi bi-x-square-fill"></i>
+                        </a>
+                    </span>
+                </li>
+            }
+        }
+    </ol>
+    <a href="/Admin/AddPlayers?TourId=@Model.Tournament.TournamentId" class="fab-btn">Thêm Người Chơi</a>
+</div>
+<hr />
+<div class="mb-3">
+    <h3 style="margin-bottom: 1.2rem;">Quản Lý Round</h3>
+    <a href="/Admin/CreateRound?TourId=@Model.Tournament.TournamentId" class="fab-btn">Tạo Round</a>
+    <a href="/Admin/EditRound?TourId=@Model.Tournament.TournamentId" class="fab-btn">Sửa Round</a>
+</div>
+<hr />
+<form method="post" class="mb-3">
+    <input hidden name="tourId" value="@Model.Tournament.TournamentId" />
+    <button class="fab-btn poppin mr-2 disabled">
+        Submit Giải Đấu
+    </button>
+</form>
+<script>
+    function AddPlayer(attempId, linkElement) {
+        $.ajax({
+            url: '/Admin/EditTournament?handler=AcceptPlayer',
+            dataType: "json",
+            type: "POST",
+            contentType: 'application/x-www-form-urlencoded',
+            data: {"attempId": attempId},
+            headers:
+            {
+                "RequestVerificationToken": $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (data) {
+                if (data && data.typeMessage && data.typeMessage == 'success') {
+                    var newUserListItem = $("<li>").addClass("pending-item");
+                    newUserListItem.append($("<span>").css("min-width", "200px").append(data.account + " (" + data.userId + ")"));
+                    newUserListItem.append($("<span>")
+                    .addClass("float-right mr-3")
+                        .append('<a onclick="RemovePlayer('+attempId+', this)"><i class="close-icon bi bi-x-square-fill"></i></a>'));
+                    $("#registered-players ol").append(newUserListItem);
+
+                    var listItem = $(linkElement).closest('li');
+                    $(listItem).remove();
+                }
+                if (data && data.typeMessage) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                        icon: data.typeMessage,
+                        title: data.message
+                    })
+                }
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        })
+    }
+
+    function RemovePlayer(attempId, linkElement) {
+        $.ajax({
+            url: '/Admin/EditTournament?handler=RemovePlayer',
+            dataType: "json",
+            type: "POST",
+            contentType: 'application/x-www-form-urlencoded',
+            data: { "attempId": attempId },
+            headers:
+            {
+                "RequestVerificationToken": $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            success: function (data) {
+                if (data && data.typeMessage && data.typeMessage == 'success') {
+                    var newUserListItem = $("<li>").addClass("pending-item");
+                    newUserListItem.append($("<span>").css("min-width", "200px").append(data.account + " (" + data.userId + ")"));
+                    newUserListItem.append($("<span>")
+                        .addClass("float-right mr-3")
+                        .append('<a onclick="AddPlayer(' + attempId + ', this)"><i class="check-icon bi bi-check-square-fill"></i></a>'));
+                    $("#pending-players ol").append(newUserListItem);
+
+                    var listItem = $(linkElement).closest('li');
+                    $(listItem).remove();
+                }
+                if(data && data.typeMessage)
+                {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                        icon: data.typeMessage,
+                        title: data.message
+                    })
+                }
+            },
+            error: function (xhr) {
+                
+            }
+        })
+    }
+</script>

@@ -1,0 +1,119 @@
+﻿@page
+@model CoFAB.Pages.News.HanoiOpenModel
+@{
+    Layout = "NewsShared/_Layout";
+}
+<style>
+    #content-image{
+        text-align: center;
+    }
+    #content-image img{
+        border-left: solid #9d9271 1px;
+        border-right: solid #9d9271 1px;
+        border-bottom: solid #9d9271 1px;
+    }
+    img{
+        width: 80%;
+    }
+    .image-background{
+        clip-path: polygon(0 0,100% 0,100% 100%,10vh 100%,0 calc(100% - 10vh));
+        content: "";
+        display: block;
+        position: absolute;
+        background-color: #e4dfc0;
+        height: 86%;
+        inset: 0;
+        width: 100%;
+        z-index: -1;
+    }
+    .content{
+        margin: 0 auto;
+        max-width: 1440px;
+        padding: 0 105px;
+    }
+    .image-wraper{
+        margin-bottom: 70px;
+        position: relative;
+    }
+    p{
+        line-height: 1.6;
+        font-size: 16px;
+    }
+    .content-contact{
+        margin-top: 40px;
+    }
+
+    @@media only screen and (max-width:768px) {
+        .content {
+            padding: 0 50px;
+        }
+    }
+
+    @@media only screen and (max-width:480px) {
+        .image-background {
+            clip-path: polygon(0 0,100% 0,100% 100%,1vh 100%,0 calc(100% - 1vh));
+        }
+
+        .content {
+            padding: 0 10px;
+        }
+        h1{
+            font-size: 24px;
+        }
+        p {
+            line-height: 1.4;
+            font-size: 14px;
+        }
+        .image-wraper {
+            margin-bottom: 40px;
+        }
+    }
+</style>
+<div>
+    <div class="image-wraper">
+        <div class="image-background">
+        </div>
+        <div id="content-image" class="image content">
+            <img src="~/images/phuclongpool.png" />
+        </div>
+    </div>
+    <div class="content">
+        <h1 style="margin-bottom: 30px;">
+            CoFAB và cơ hội hợp tác cùng Nguyễn Phúc Long - Ngôi Sao Bi-a Chuyên Nghiệp
+        </h1>
+        <p>
+            Hà Nội, 16 Tháng 10, 2023 - CoFAB, nền tảng bi-a sáng tạo, chuyên nghiệp thông báo về sự hợp tác đầy hứa hẹn với cơ thủ Nguyễn Phúc Long, một trong những tên tuổi nổi bật trong làng Bi-a Việt Nam. Sự kết hợp này sẽ mang lại nhiều tiềm năng cho cộng đồng Bi-a cũng như cho người hâm mộ bộ môn này.
+
+        </p>
+        <p>
+            Nguyễn Phúc Long sở hữu một sự nghiệp Bi-a đáng nể với <strong>hơn 30 năm kinh nghiệm</strong>,
+            trong đó có hơn 20 năm thi đấu với tư cách vận động viên chuyên nghiệp. Anh là một 
+            ngôi sao nổi bật với nhiều thành tích ấn tượng, trong đó có <strong>
+                2 lần đoạt Huy Chương
+                Vàng
+            </strong> 
+            tại <strong>SEA Games 2009</strong> (đánh dấu lần đầu tiên một vận động viên nam Việt Nam giành
+            HCV ở môn đơn nam) và <strong>2010 Đại Hội Thể Thao và TDTT Toàn Quốc</strong> (vô địch đồng thời cả Pool 8 bi và Pool 9 bi),
+            cùng với hàng loạt huy chương vàng và bạc tại các giải đấu quốc tế.
+        </p>
+        <p>
+            Không chỉ là một ngôi sao của Bi-a, Nguyễn Phúc Long còn là <strong>một giảng viên tâm huyết</strong>.
+            Anh đã cung cấp nhiều <strong>khóa học và workshop về Bi-a</strong> cho người chơi ở mọi trình độ, giúp họ
+            nâng cao kỹ năng và hiểu sâu hơn về trò chơi. Sứ mệnh của anh là truyền đạt đam mê và kiến thức 
+            về Bi-a cho thế hệ trẻ và cộng đồng yêu thể thao này.
+
+        </p>
+        <p>
+            Trong thời gian tới, ông Phúc Long sẽ tận dụng nền tảng CoFAB để tổ chức giải đấu tại Phúc Long Pool, tạo ra những trải nghiệm chuyên nghiệp và hấp dẫn cho người tham gia. Sự hợp tác giữa CoFAB và Nguyễn Phúc Long không chỉ là sự kết nối giữa những người đam mê Bi-a, mà còn là cơ hội để phát triển và thúc đẩy thể thao này ở Việt Nam.
+        </p>
+        <p>
+            Nguyễn Phúc Long cùng CoFAB đang hướng đến tương lai đầy triển vọng cho công đồng Bi-a tại Việt Nam. Hãy cùng chúng tôi theo dõi những bước tiến mới và những giải đấu sôi động cùng Nguyễn Phúc Long và CoFAB!
+        </p>
+        <p class="content-contact">
+            <strong>Liên hệ chúng tôi cho những giải đấu chuyên nghiệp</strong><br />
+            𝐂𝐨𝐅𝐀𝐁 - 𝐂𝐡𝐚𝐧𝐠𝐞 𝐲𝐨𝐮𝐫 𝐠𝐚𝐦𝐞𝐬<br />
+            Hotline: 0899817555 (Mr. Hoàng)<br />
+            Gmail: cofab.vn@gmail.com
+        </p>
+    </div>
+</div>

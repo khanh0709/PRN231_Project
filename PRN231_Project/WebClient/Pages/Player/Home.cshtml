@@ -1,0 +1,397 @@
+﻿@page
+@using CoFAB.Business.DTO;
+@model CoFAB.Pages.Player.HomeModel
+@{
+    Layout = "PlayerShared/_Layout";
+}
+<style>
+    table {
+        border-color: #a7733f;
+    }
+
+    table th {
+            background-color: #873229;
+        color: #fff;
+    }
+
+    table tr:nth-child(2n) {
+        background: transparent;
+    }
+
+    table tr:nth-child(odd) {
+            background: rgba(135, 50, 41, 0.1);
+    }
+
+    table td, table th {
+        padding: 3px 8px;
+    }
+
+    table {
+        border: 2px solid #a7733f;
+        width: 100%;
+    }
+    .tour {
+        cursor: pointer;
+        background-color: #873229;
+        color: #fff;
+        border: 2px solid #a7733f;
+        border-radius: 1px;
+        margin: 20px 0;
+        padding: 8px 16px;
+    }
+    .tour-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    .tour-status{
+        text-align: center;
+        margin: 10px 0;
+    }
+    .tour-list{
+        margin: 60px 0;
+    }
+    .tour-body{
+        margin: 20px 0;
+    }
+
+    .card{
+        border: none;
+    }
+    .table-tour th{
+        width: 20%;
+    }
+
+    .table-result th {
+        width: 90%;
+    }
+
+    .card{
+        background: transparent;
+    }
+
+    .send-icon{
+        padding: 4px;
+    }
+
+    .send-btn{
+        background: transparent;
+        border: none;
+        color: white;
+    }
+</style>
+<h1 class="tour-status">Thông Tin Tài Khoản</h1>
+<div id="accordion">
+    <div class="row">
+        <div class="col col-md-6">
+            <div class="block-table">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th colspan="2">Thông Tin Tài Khoản</th>
+                        </tr>
+                        <tr>
+                            <td>Tên/Id</td>
+                            <td>@Model.User.FullName / @Model.User.UserId</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>@Model.User.Email</td>
+                        </tr>
+                        <tr>
+                            <td>Thành Phố</td>
+                            <td>@Model.User.CityName</td>
+                        </tr>
+                        <tr>
+                            <td>Authorization</td>
+                            <td>Player</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="block-table">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Thống Kê</th>
+                            <th>Điểm</th>
+                            <th>Rank Thành Phố</th>
+                            <th>Rank Việt Nam</th>
+                        </tr>
+                        <tr>
+                            <td>90 Day XP</td>
+                            <td>@Model.User.Score90Day</td>
+                            <td>@Model.User.CityRank90Day</td>
+                            <td>@Model.User.GlobalRank90Day</td>
+                        </tr>
+                        <tr>
+                            <td>Lifetime XP</td>
+                            <td>@Model.User.Score</td>
+                            <td>@Model.User.CityRank</td>
+                            <td>@Model.User.GlobalRank</td>
+                        </tr>
+                        <tr>
+                            <td>Total Wins</td>
+                            <td>@Model.User.TotalWins</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <a class="fab-btn ml-3 mt-3 btn-hover" href="/Player/EditProfile">Sửa Thông Tin</a>
+    </div>
+    <div class="tour-list">
+        <h1 class="tour-status">Đang Diễn Ra</h1>
+        @if(Model.RegisteredTour.Count() == 0)
+        {
+            <div style="text-align: center;">
+                <i style="color: #00000075;">Chưa có giải đấu</i>
+            </div>
+        }
+        @foreach(TournamentDTO tour in Model.RegisteredTour)
+        {
+            <div class="card">
+                <div id="heading-@tour.TournamentId" class="tour" data-toggle="collapse" data-target="#tour-@tour.TournamentId" aria-expanded="true">
+                    <div class="tour-header">
+                        <h5>@tour.Name</h5>
+                        <span>
+                            <i class="bi bi-chevron-double-right"></i>
+                        </span>
+                    </div>
+                    <div class="tour-description">
+                        <i>@tour.Description</i>
+                    </div>
+                </div>
+
+                <div id="tour-@tour.TournamentId" class="collapse" aria-labelledby="heading-@tour.TournamentId" data-parent="#accordion">
+                    <div class="tour-body">
+                        <div class="block-table table-tour">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>Tên Giải Đấu</th>
+                                        <td>@tour.Name</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date</th>
+                                        <td>@tour.StartTime</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Thể Loại</th>
+                                        <td>@tour.Type.TypeName</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Người Tổ Chức</th>
+                                        <td>@tour.User.Account</td>
+                                    </tr>
+                                    <tr>
+                                        <th>XP Modifier</th>
+                                        <td>@tour.Xpmodifier</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="block-table table-result mt-2">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>Số Trận Thắng</th>
+                                        <td>@tour.TotalWins</td>
+                                    </tr>
+                                    <tr>
+                                        <th>XP Gained</th>
+                                        <td>@tour.Xpgained</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="block-table table-round mt-2">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>Round</th>
+                                        <th>Người Chơi 1</th>
+                                        <th>Người Chơi 2</th>
+                                        <th>Kết Quả</th>
+                                    </tr>
+                                        @foreach (var round in tour.Rounds)
+                                        {
+                                            @foreach (var match in round.Matches)
+                                            {
+                                                @if (match.Player1 == Model.User.UserId || match.Player2 == Model.User.UserId)
+                                                {
+                                                    <tr>
+                                                        <td>@round.RoundName</td>
+                                                        <td>@match.Player1Navigation?.Account</td>
+                                                        <td>@match.Player2Navigation?.Account</td>
+                                                        @if (match.Winer == match.Player1)
+                                                        {
+                                                            <td>Player 1 Win</td>
+                                                        }
+                                                        else if (match.Winer == match.Player2)
+                                                        {
+                                                            <td>Player 2 Win</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>None</td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="tour-list">
+        <h1 class="tour-status">Sắp Diễn Ra</h1>
+        @if (Model.UpComingTour.Count() == 0)
+        {
+            <div style="text-align: center;">
+                <i style="color: #00000075;">Chưa có giải đấu</i>
+            </div>
+        }
+        @foreach(TournamentDTO tour in Model.UpComingTour)
+        {
+            <div class="card">
+                <div class="tour" data-toggle="collapse" aria-expanded="true">
+                    <div class="tour-header">
+                        <h5>@tour.Name</h5>
+                        <form method="post" asp-page-handler="request">
+                            <input hidden name="tourId" value="@tour.TournamentId"/>
+                            <button class="send-btn" title="Gửi yêu cầu tham gia">
+                                <i class="send-icon bi bi-send"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="tour-description">
+                        <i>@tour.Description</i>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="tour-list">
+        <h1 class="tour-status">Đã Kết Thúc</h1>
+        @if (Model.EndTour.Count() == 0)
+        {
+            <div style="text-align: center;">
+                <i style="color: #00000075;">Chưa có giải đấu</i>
+            </div>
+        }
+        @foreach (TournamentDTO tour in Model.EndTour)
+        {
+            <div class="card">
+                <div id="heading-@tour.TournamentId" class="tour" data-toggle="collapse" data-target="#tour-@tour.TournamentId" aria-expanded="true">
+                    <div class="tour-header">
+                        <h5>@tour.Name</h5>
+                        <span>
+                            <i class="bi bi-chevron-double-right"></i>
+                        </span>
+                    </div>
+                    <div class="tour-description">
+                        <i>@tour.Description</i>
+                    </div>
+                </div>
+
+                <div id="tour-@tour.TournamentId" class="collapse" aria-labelledby="heading-@tour.TournamentId" data-parent="#accordion">
+                    <div class="tour-body">
+                        <div class="block-table table-tour">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>Tên Giải Đấu</th>
+                                        <td>@tour.Name</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date</th>
+                                        <td>@tour.StartTime</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Thể Loại</th>
+                                        <td>@tour.Type.TypeName</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Người Tổ Chức</th>
+                                        <td>@tour.User.Account</td>
+                                    </tr>
+                                    <tr>
+                                        <th>XP Modifier</th>
+                                        <td>@tour.Xpmodifier</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="block-table table-result mt-2">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>Số Trận Thắng</th>
+                                        <td>@tour.TotalWins</td>
+                                    </tr>
+                                    <tr>
+                                        <th>XP Gained</th>
+                                        <td>@tour.Xpgained</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="block-table table-round mt-2">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>Round</th>
+                                        <th>Người Chơi 1</th>
+                                        <th>Người Chơi 2</th>
+                                        <th>Kết Quả</th>
+                                    </tr>
+                                        @foreach(var round in tour.Rounds)
+                                        {
+                                            @foreach(var match in round.Matches)
+                                            {
+                                                @if (match.Player1 == Model.User.UserId || match.Player2 == Model.User.UserId)
+                                                {
+                                                    <tr>
+                                                        <td>@round.RoundName</td>
+                                                        <td>@match.Player1Navigation?.Account</td>
+                                                        <td>@match.Player2Navigation?.Account</td>
+                                                        @if(match.Winer == match.Player1)
+                                                        {
+                                                            <td>Player 1 Win</td>
+                                                        }
+                                                        else if(match.Winer == match.Player2)
+                                                        {
+                                                            <td>Player 2 Win</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>None</td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

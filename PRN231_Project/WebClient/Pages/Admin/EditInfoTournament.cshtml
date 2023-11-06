@@ -1,0 +1,61 @@
+﻿@page
+@using CoFAB.Business.DTO;
+@model CoFAB.Pages.Admin.EditInfoTournamentModel
+
+@{
+    Layout = "AdminShared/_Layout";
+}
+<a href="/Admin/Home" class="fab-btn mb-3">Huỷ</a>
+<h1 class="mb-3">Sửa Thông Tin Giải Đấu</h1>
+<form method="post">
+    <input hidden name="id" value="@Model.Tournament.TournamentId" />
+    <label>Tên Giải Đấu*</label>
+    <input name="name" class="form-control mb-3" type="text" required value="@Model.Tournament.Name" />
+
+    <label>Thể Loại*</label>
+    <select name="typeId" class="custom-select mb-3" required>
+        @foreach(TypeDTO t in Model.Types)
+        {
+            @if(Model.Tournament.TypeId == t.TypeId)
+            {
+                <option selected value="@t.TypeId">@t.TypeName</option>
+            }
+            else
+            {
+                <option value="@t.TypeId">@t.TypeName</option>            
+            }
+        }
+    </select>
+
+    <label>Format*</label>
+    <select name="formatId" class="custom-select mb-3" required>
+        @foreach (FormatDTO f in Model.Formats)
+        {
+            @if (Model.Tournament.FormatId == f.FormatId)
+            {
+                <option selected value="@f.FormatId">@f.FormatName</option>
+
+            }
+            else
+            {
+                <option value="@f.FormatId">@f.FormatName</option>
+
+            }
+        }
+    </select>
+
+    <label>XP Modifier</label>
+    <input class="form-control mb-3" type="text" name="xpmodifier" required value="@Model.Tournament.Xpmodifier">
+
+    <label>Thời Gian Bắt Đầu*</label>
+    <input class="form-control mb-3" type="datetime-local" name="startTime" required value="@Model.Tournament.StartTime?.ToString("yyyy-MM-ddTHH:mm")">
+
+    <label>Địa Chỉ Tổ Chức*</label>
+    <input class="form-control mb-3" type="text" name="address" required value="@Model.Tournament.Address">
+
+    <label>Mô Tả Giải Đấu</label>
+    <textarea class="form-control mb-3" rows="3" name="description">@Model.Tournament.Description</textarea>
+
+    <button class="fab-btn" type="submit">Sửa</button>
+</form>
+ 

@@ -1,0 +1,115 @@
+﻿@page
+@model CoFAB.Pages.News.WorkshopNeuModel
+@{
+    Layout = "NewsShared/_Layout";
+}
+<style>
+    .image{
+        text-align: center;
+    }
+    img {
+        width: 90%;
+    }
+
+    .image-background {
+        clip-path: polygon(0 0,100% 0,100% 100%,10vh 100%,0 calc(100% - 10vh));
+        content: "";
+        display: block;
+        position: absolute;
+        background-color: #c8cdd1;
+        height: 86%;
+        inset: 0;
+        width: 100%;
+        z-index: -1;
+    }
+
+    .content {
+        margin: 0 auto;
+        max-width: 1440px;
+        padding: 0 105px;
+    }
+
+    .image-wraper {
+        margin-bottom: 70px;
+        position: relative;
+    }
+
+    p {
+        line-height: 1.6;
+        font-size: 16px;
+    }
+
+    .content-contact {
+        margin-top: 40px;
+    }
+
+    @@media only screen and (max-width:768px) {
+        .content {
+            padding: 0 50px;
+        }
+    }
+
+    @@media only screen and (max-width:480px) {
+        .image-background {
+            clip-path: polygon(0 0,100% 0,100% 100%,1vh 100%,0 calc(100% - 1vh));
+        }
+
+        .content {
+            padding: 0 10px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        p {
+            line-height: 1.4;
+            font-size: 14px;
+        }
+
+        .image-wraper {
+            margin-bottom: 40px;
+        }
+    }
+</style>
+<div>
+    <div class="image-wraper">
+        <div class="image-background">
+        </div>
+        <div class="image content">
+            <img src="~/images/workshopneu2.png" />
+        </div>
+    </div>
+    <div class="content">
+        <h1 style="margin-bottom: 30px;">
+            Recap: CoFAB- Buổi Truyền Thông tại NEU
+        </h1>
+        <p>
+            Hà Nội, ngày 6/10 - CoFAB đã tổ chức một buổi truyền thông đầy sắc màu tại Trường Kinh Tế Quốc Dân. Buổi sự kiện đã thu hút sự tham gia và ủng hộ nồng nhiệt từ cả sinh viên trong và ngoài trường.
+        </p>
+        <p>
+            Buổi truyền thông đã diễn ra trong không gian hội trường A2 của trường đại học Kinh tế Quốc Dân. Sự kiện đã thu hút sự quan tâm và tham gia nhiệt tình từ cộng đồng sinh viên yêu thích Bi-a tới những người yêu thích thể thao Bi-a chuyên nghiệp. Sự giao lưu, kết nối và chia sẻ niềm đam mê đã tạo nên một bầu không khí cực nóng bỏng và hấp dẫn.
+        </p>
+        <div class="image content" style="margin: 40px 0;">
+            <img src="~/images/workshopneu1.png" />
+        </div>
+        <p>
+            Đây không chỉ đơn thuần là một sự kiện giới thiệu về dự án CoFAB, mà còn là cơ hội để mọi người  có thể kết nối và cùng nhau trải nghiệm những hoạt động thú vị như: tham gia đấu giải Bi-a, minigame và nhiều phần quà hấp dẫn để tri ân đến tất cả mọi người tham dự.
+
+        </p>
+        <p>
+            Buổi sự kiện cũng là dịp để CoFAB trao đổi, lắng nghe ý kiến và cảm nhận sự ủng hộ của cộng đồng. Điều này đã thúc đẩy chúng tôi hơn nữa trong việc hoàn thiện dự án và cung cấp trải nghiệm tốt nhất cho người chơi bi-a.
+
+        </p>
+        <p>
+            CoFAB cam kết tiếp tục phát triển và đồng hành cùng cộng đồng bi-a để tạo nên một môi trường đoàn kết và phát triển. Chúng tôi xin cảm ơn sự tham gia và ủng hộ từ tất cả mọi người tại buổi truyền thông đặc biệt này.
+
+        </p>
+        <p class="content-contact">
+            <strong>Liên hệ chúng tôi cho những giải đấu chuyên nghiệp</strong><br />
+            𝐂𝐨𝐅𝐀𝐁 - 𝐂𝐡𝐚𝐧𝐠𝐞 𝐲𝐨𝐮𝐫 𝐠𝐚𝐦𝐞𝐬<br />
+            Hotline: 0899817555 (Mr. Hoàng)<br />
+            Gmail: cofab.vn@gmail.com
+        </p>
+    </div>
+</div>

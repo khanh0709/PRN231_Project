@@ -1,0 +1,117 @@
+﻿@page
+@model CoFAB.Pages.News.HanoiOpenModel
+@{
+    Layout = "NewsShared/_Layout";
+}
+<style>
+    img{
+        width: 100%;
+    }
+    .image-background{
+        clip-path: polygon(0 0,100% 0,100% 100%,10vh 100%,0 calc(100% - 10vh));
+        content: "";
+        display: block;
+        position: absolute;
+        background-color: #090d0f;
+        height: 86%;
+        inset: 0;
+        width: 100%;
+        z-index: -1;
+    }
+    .content{
+        margin: 0 auto;
+        max-width: 1440px;
+        padding: 0 105px;
+    }
+    .image-wraper{
+        margin-bottom: 70px;
+        position: relative;
+    }
+    p{
+        line-height: 1.6;
+        font-size: 16px;
+    }
+    .content-contact{
+        margin-top: 40px;
+    }
+
+    @@media only screen and (max-width:768px) {
+        .content {
+            padding: 0 50px;
+        }
+    }
+
+    @@media only screen and (max-width:480px) {
+        .image-background {
+            clip-path: polygon(0 0,100% 0,100% 100%,1vh 100%,0 calc(100% - 1vh));
+        }
+
+        .content {
+            padding: 0 10px;
+        }
+        h1{
+            font-size: 24px;
+        }
+        p {
+            line-height: 1.4;
+            font-size: 14px;
+        }
+        .image-wraper {
+            margin-bottom: 40px;
+        }
+    }
+</style>
+<div>
+@*    <div class="image-wraper">
+        <div class="image-background">
+        </div>
+        <div class="image content">
+            <img src="~/images/hanoiopen1.png" />
+        </div>
+    </div>*@
+    <div class="content" style="margin-top: 40px; margin-bottom: 40px;">
+        <h1 style="margin-bottom: 30px;">
+            Về chúng tôi
+        </h1>
+        <p>
+            🎯 Chúng tôi là ai?
+        </p>
+        <p>
+            Hãy tưởng tượng bạn tham gia một giải đấu Bi-a nhưng gặp phải đối thủ không cân sức, không biết rõ đối thủ của mình là ai.. Nếu bạn là một nhà tổ chức giải đấu và vẫn loay hay, mất thời gian trong việc xếp các cặp đấu thủ công.
+
+        </p>
+        <p>
+            🔥 Hiểu được điều này, "CoFAB - Nền tảng ranking tự động và hệ thống ghép cặp tự động dành riêng cho các đơn vị và câu lạc bộ tổ chức giải đấu Bi-a, đã ra đời với sứ mệnh thay đổi cách bạn nhìn vào giải đấu.”
+
+        </p>
+        <p>
+            💡Co FAB mang đến giá trị gì?
+
+        </p>
+        <p>
+            Chúng tôi mong muốn tạo ra một môi trường thi đấu công bằng, minh bạch, giúp các nhà tổ chức, câu lạc bộ tổ chức giải đấu tiết kiệm thời gian trong quá trình xếp cặp các cơ thủ. “FAIR GAME, SAVE TIME, TRANSPARENCY” - đó chính là triết lý của chúng tôi
+
+        </p>
+        <p>
+            🚀Sứ mệnh của Co FAB là gì?
+
+        </p>
+        <p>
+            "To provide a place for transparent tournaments" - Cung cấp một nơi cho các giải đấu công bằng, minh bạch! Chúng tôi tin rằng chỉ khi mọi thứ được hiển nhiên và rõ ràng, bạn mới có thể thể hiện tốt nhất bản thân mình trên bàn đấu.
+
+        </p>
+        <p>
+            Với nền tảng tự động hóa xếp cặp & xếp hạng, mọi nhà tổ chức giải đấu sẽ không còn tốn thời gian cho việc xếp cặp thủ công và người chơi sẽ có những trải nghiệm tuyệt vời nhất. Hãy để đội ngũ chuyên nghiệp của Co FAB đồng hành cùng bạn trên con đường thay đổi cách bạn tham gia giải đấu.!
+
+        </p>
+        <p>
+            🔮Và đừng bỏ lỡ hành trình của chúng tôi, nơi CoFAB thay đổi cách bạn nhìn vào thế giới của giải đấu Bi-a.!!!
+        </p>
+@*        <p class="content-contact">
+            <strong>Liên hệ chúng tôi cho những giải đấu chuyên nghiệp</strong><br />
+            𝐂𝐨𝐅𝐀𝐁 - 𝐂𝐡𝐚𝐧𝐠𝐞 𝐲𝐨𝐮𝐫 𝐠𝐚𝐦𝐞𝐬<br />
+            Hotline: 0899817555 (Mr. Hoàng)<br />
+            Gmail: cofab.vn@gmail.com
+        </p>*@
+    </div>
+</div>

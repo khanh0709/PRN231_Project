@@ -1,0 +1,102 @@
+﻿@page
+@model CoFAB.Pages.Common.LoginModel
+@{
+    Layout = "CommonShared/_Layout";
+}
+@* <form method="post">
+    <input name="acc" type="text" placeholder="UserName" />
+    <input name="passWord" type="password" placeholder="PassWord" />
+    <button class="btn btn-primary btn-lg btn-block btn-login" type="submit">Login</button>
+</form> *@
+<style>
+    article {
+        background-image: url(https://images.unsplash.com/photo-1544281153-6603be88b354?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmlsbGlhcmR8ZW58MHx8MHx8fDA%3D&w=1000&q=80);
+        /* background-image: url(https://wallpaperaccess.com/full/1727607.jpg); */
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style>
+@Html.AntiForgeryToken()
+<article class="border-st border-st-btm-5">
+    <div class="container py-4 py-lg-5">
+
+        <div class="container">
+            <div class="row no-gutters d-flex flex-column align-items-center">
+                <div class="col-12 col-md-8">
+
+
+                    <style>
+                        .hs-h1 h1 {
+                            margin: 0px;
+                        }
+                    </style>
+                    <div class="d-flex justify-content-center mb-5">
+                        <div class="articles-header hs-h1 d-flex flex-column justify-content-center w-100">
+                            <hr class="white-border">
+                            <h1 class="px-3 px-lg-5 text-center">Đăng nhập</h1>
+                            <hr class="white-border">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row no-gutters d-flex flex-column align-items-center pb-4">
+                <div class="col-12 col-md-8 p-3 p-md-5 border-c-2 fab-form-wrapper">
+                    <form method="post" class="fab-form login-form">
+                        <h6 id="error" style="color: red"></h6>
+                        <div class="form-group"><label class="font-white" for="id_username">Tài khoản</label><input type="text" name="acc" autofocus="" autocapitalize="none" autocomplete="username" maxlength="254" class="form-control" placeholder="Tài khoản" title="" required id="acc"></div>
+                        <div class="form-group"><label class="font-white" for="id_password">Mật khẩu</label><input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Mật khẩu" title="" required id="password"></div>
+                        <div class="d-flex justify-content-between pt-1 pb-3">
+                            @*                             <button type="submit" id="submit" class="fab-btn">
+                            Login
+                            </button> *@
+                            @* <a class="fab-btn btn-hover" href="/common/login/">Login</a> *@
+                            <button type="button" onclick="formSubmit()" class="btn btn-light-blur btn-rounded btn-hover">Đăng nhập</button>
+                            <div class="fab-form-actions">
+                                @* <a class="pr-2 font-white link" href="/accounts/password_reset/">Forgot password?</a> *@
+                                <a class="font-white link" href="/Common/SignUp/">Đăng ký</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</article>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    function formSubmit() {
+        // var formData = new FormData();
+        // formData.append("acc", $("#acc").val());
+        // formData.append("password", $("#password").val());
+        var acc = $("#acc").val();
+        var pass = $("#password").val();
+        if (acc == "" || pass == "") {
+            document.getElementById("error").innerHTML = "Tài khoản và mật khẩu không được để trống!";
+            return;
+        }
+        $.ajax({
+            url: '/Common/Login?handler=Submit',
+            dataType: "json",
+            type: "POST",
+            contentType: 'application/x-www-form-urlencoded',
+            headers:
+            {
+                "RequestVerificationToken": $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            // data: formData,
+            data: { "acc": acc, "passWord": pass },
+            success: function (data) {
+                if (data.success)
+                    document.location.href = data.url;
+                else
+                    document.getElementById("error").innerHTML = "Tài khoản hoặc mật khẩu sai!";
+            },
+            error: function (data) {
+                alert('error');
+            }
+        });
+    }
+</script>

@@ -1,0 +1,105 @@
+﻿@page
+@model CoFAB.Pages.News.HanoiOpenModel
+@{
+    Layout = "NewsShared/_Layout";
+}
+<style>
+    img{
+        width: 100%;
+    }
+    .image-background{
+        clip-path: polygon(0 0,100% 0,100% 100%,10vh 100%,0 calc(100% - 10vh));
+        content: "";
+        display: block;
+        position: absolute;
+        background-color: #090d0f;
+        height: 86%;
+        inset: 0;
+        width: 100%;
+        z-index: -1;
+    }
+    .content{
+        margin: 0 auto;
+        max-width: 1440px;
+        padding: 0 105px;
+    }
+    .image-wraper{
+        margin-bottom: 70px;
+        position: relative;
+    }
+    p{
+        line-height: 1.6;
+        font-size: 16px;
+    }
+    .content-contact{
+        margin-top: 40px;
+    }
+
+    @@media only screen and (max-width:768px) {
+        .content {
+            padding: 0 50px;
+        }
+    }
+
+    @@media only screen and (max-width:480px) {
+        .image-background {
+            clip-path: polygon(0 0,100% 0,100% 100%,1vh 100%,0 calc(100% - 1vh));
+        }
+
+        .content {
+            padding: 0 10px;
+        }
+        h1{
+            font-size: 24px;
+        }
+        p {
+            line-height: 1.4;
+            font-size: 14px;
+        }
+        .image-wraper {
+            margin-bottom: 40px;
+        }
+    }
+</style>
+<div>
+    <div class="image-wraper">
+        <div class="image-background">
+        </div>
+        <div class="image content">
+            <img src="~/images/hanoiopen1.png" />
+        </div>
+    </div>
+    <div class="content">
+        <h1 style="margin-bottom: 30px;">
+            Hanoi Open - Sự Khởi Đầu của Một Cường Quốc Bi-a!
+        </h1>
+        <p>
+            Hanoi, 16/10 - Ngày hội Bi-a lớn nhất trong năm - Hanoi Open 2023, đã chính thức khai mạc tại thủ đô Hà Nội. Sự kiện này không chỉ đánh dấu một bước ngoặt quan trọng cho cộng đồng yêu bi-a tại Việt Nam mà còn tạo ra những dấu ấn quan trọng trên bản đồ thể thao Bi-a quốc tế.
+        </p>
+        <p>
+            Hanoi Open 2023 là một sân chơi Bi-a đỉnh cao thu hút các tay bi-a hàng đầu từ khắp cả nước, cũng như sự quan tâm lớn từ các cơ thủ quốc tế. Tại giải đấu này, họ đã có cơ hội thi đấu và cống hiến cho người hâm mộ những pha Bi-a đỉnh cao.
+
+        </p>
+        <p>
+            Nếu trước đây, Bi-a thường được coi là một trò chơi giải trí, thì Hanoi Open 2023 đã chứng minh rằng nó đã trở thành một môn thể thao chuyên nghiệp. Những tay Bi-a tham gia không chỉ thể hiện kỹ thuật xuất sắc mà còn mang đến những trận đấu kịch tính và căng thẳng, đáng xem không kém bất kỳ môn thể thao nào.
+
+        </p>
+        <p>
+            Sự kiện này đã thu hút sự quan tâm lớn từ phía khán giả. Hàng trăm người hâm mộ đã đổ về hội trường để theo dõi các trận đấu và cổ vũ cho những cơ thủ. Họ không chỉ được chiêm ngưỡng những màn biểu diễn ấn tượng, mà còn có cơ hội cùng hòa mình vào bầu không khí sôi động và đáng nhớ. Sân chơi chuyên nghiệp của Hanoi Open 2023 đã giúp mở ra tương lai và sự phát triển hùng mạnh của bộ môn Bi-a tại Việt Nam.
+
+        </p>
+        <div class="image content" style="margin: 40px 0;">
+            <img src="~/images/hanoiopen2.png" />
+        </div>
+        <p>
+            Hòa chung “sức nóng” và “sự tỏa nhiệt” nhanh chóng của Hanoi Open 2023, CoFAB đồng thời cũng đang thực hiện các dự án hợp tác cho những giải đấu chuyên nghiệp, đem lại sự công bằng và minh bạch cho những cơ thủ và những người yêu thích môn thể thao billiards này.
+
+        </p>
+        <p class="content-contact">
+            <strong>Liên hệ chúng tôi cho những giải đấu chuyên nghiệp</strong><br />
+            𝐂𝐨𝐅𝐀𝐁 - 𝐂𝐡𝐚𝐧𝐠𝐞 𝐲𝐨𝐮𝐫 𝐠𝐚𝐦𝐞𝐬<br />
+            Hotline: 0899817555 (Mr. Hoàng)<br />
+            Gmail: cofab.vn@gmail.com
+        </p>
+    </div>
+</div>

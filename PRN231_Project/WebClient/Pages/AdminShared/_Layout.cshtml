@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoFAB</title>
+    <link rel="shortcut icon" type="image/png" href="/images/logo.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+          rel="stylesheet" />
+          @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>*@
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    @*jquery*@
+    @*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*@
+    @*select2*@
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+      integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<style>
+    body{
+        font-family: Montserrat;
+    }
+    a {
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    #siteNav {
+        box-shadow: 0px 1px 12px 3px rgba(211, 211, 211, 0.75);
+        background-color: white;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+    }
+
+    .container {
+        
+    }
+
+    .fab-btn {
+        background-color: #fff;
+        border: 1px solid #c19a57;
+        border-radius: 0;
+        border-radius: 3px;
+        color: #000;
+        display: inline-block;
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.5;
+        padding: 0.2rem 0.5rem;
+        text-align: center;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .fab-btn:hover {
+        background-color: #e4c293;
+        border: 1px solid #c19a57;
+        color: #000;
+        cursor: pointer;
+        opacity: 1;
+        outline: 0;
+        text-decoration: none;
+        transition: .2s ease-in-out;
+    }
+
+    .fab-btn.poppin {
+        background-color: #873229;
+        color: white;
+    }
+
+    .fab-btn.poppin:hover {
+        background-color: #b44337;
+        color: white;
+    }
+
+    .create-tour, .tournaments {
+        margin-top: 3rem;
+    }
+
+    .tournament{
+        margin-bottom: 32px;
+    }
+
+    #logo{
+        width: 100px;
+    }
+
+    .flex{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .user-icon {
+        font-size: 24px;
+        margin-right: 10px;
+        color: #873229;
+    }
+
+    .close-icon, .check-icon {
+        font-size: 18px;
+        color: #873229;
+    }
+
+    .close-icon:hover, .check-icon:hover {
+        color: #b44337;
+    }
+    .user-icon:hover {
+        color: #b44337;
+    }
+
+    .tournament-inf{
+        font-weight: 400;
+    }
+
+    .profile-form label{
+        font-weight: 500;
+    }
+
+    .pending-item{
+        margin: 4px 0;
+    }
+
+    hr {
+        border-style: single;
+        border-top-width: 1px;
+        margin: 2rem 0;
+    }
+
+    .form-select {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+        -moz-padding-start: calc(0.75rem - 3px);
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fff;
+        background-image: url(data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e);
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 16px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        outline: none;
+    }
+
+    .swal2-cancel, .swal2-denym, .swal2-confirm{
+        margin: 0 4px;
+    }
+</style>
+<body>
+    <div id="siteNav">
+        <div class="container flex">
+            <a href="/Admin/Home">
+                <img id="logo" src="/images/logo2.png" />
+            </a>
+            <div class="action-wrapper">
+                <a href="/Admin/Profile">
+                    <i class="user-icon bi bi-person-circle"></i>
+                </a>
+                <a class="fab-btn" href="/Common/Logout">
+                    Đăng Xuất
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="container py-5" id="container-wrapper">
+        @RenderBody()   
+    </div>
+    
+    @if (!string.IsNullOrEmpty(TempData["FlashMessage"] as string) && !string.IsNullOrEmpty(TempData["TypeMessage"] as string))
+    {
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+            Toast.fire({
+                icon: '@TempData["TypeMessage"]',
+                title: '@TempData["FlashMessage"]'
+            })
+        </script>
+    }
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
