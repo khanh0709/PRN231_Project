@@ -1,39 +1,56 @@
-using CoFAB.Business.DTO;
-using CoFAB.Business.Enums;
-using CoFAB.Business.IRepository;
-using CoFAB.Helper;
+using WebClient.Helper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using WebAPI.Business.DTO;
+using WebAPI.Business.Enums;
+using WebClient.Helper;
 
-namespace CoFAB.Pages.Common
+namespace WebClient.Pages.Common
 {
     public class LoginModel : PageModel
     {
-        public IUserRepository UserRepository;
-        public LoginModel(IUserRepository UserRepository)
+        private readonly APIHelper ApiHelper;
+        private readonly ISession session;
+        public LoginModel(APIHelper ApiHelper, IHttpContextAccessor httpContextAccessor)
         {
-            this.UserRepository = UserRepository;
+            this.ApiHelper = ApiHelper;
+            this.session = httpContextAccessor.HttpContext.Session;
         }
+
         public void OnGet()
         {
 
         }
-        public IActionResult OnPostSubmit(string acc, string passWord)
+        public async Task<IActionResult> OnPostSubmit(string acc, string passWord)
         {
-            UserDTO u = UserRepository.GetUserByAccAndPass(acc, passWord);
-            if (u != null)
+            try
             {
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "user", u);
-                if (u.Role == (int)UserRole.Admin)
+                LoginDTO model = new LoginDTO();
+                model.Account = acc;
+                model.Password = passWord;
+                UserDTO user = await ApiHelper.Login(model);
+                if (user != null)
                 {
-                    return new JsonResult(new { success = true, url = "/Admin/Home" });
-                }
-                else if (u.Role == (int)UserRole.Player)
-                {
-                    return new JsonResult(new { success = true, url = "/Player/Home" });
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "user", user);
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "token", user.Token);
+                    if (user.Role == (int)UserRole.Admin)
+                    {
+                        return new JsonResult(new { success = true, url = "/Admin/Home" });
+                    }
+                    else if (user.Role == (int)UserRole.Player)
+                    {
+                        return new JsonResult(new { success = true, url = "/Player/Home" });
+                    }
                 }
             }
-            return new JsonResult(new { success = false});
+            catch (Exception)
+            {
+                return new JsonResult(new { success = false });
+                throw;
+            }
+            return new JsonResult(new { success = false });
         }
     }
 }

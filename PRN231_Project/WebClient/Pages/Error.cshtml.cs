@@ -8,20 +8,17 @@ namespace CoFAB.Pages
     [IgnoreAntiforgeryToken]
     public class ErrorModel : PageModel
     {
-        public string? RequestId { get; set; }
+        public string message { get; set; } 
+        public string backUrl { get; set; } 
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-
-        private readonly ILogger<ErrorModel> _logger;
-
-        public ErrorModel(ILogger<ErrorModel> logger)
+        public ErrorModel()
         {
-            _logger = logger;
         }
 
-        public void OnGet()
+        public void OnGet(string message, string backUrl)
         {
-            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            this.message = message; 
+            this.backUrl = backUrl; 
         }
     }
 }

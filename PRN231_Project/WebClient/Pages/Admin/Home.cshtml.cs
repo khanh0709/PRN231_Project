@@ -1,25 +1,34 @@
-using CoFAB.Business.DTO;
-using CoFAB.Business.Enums;
-using CoFAB.Business.IRepository;
-using CoFAB.Helper;
+using WebAPI.Business.DTO;
+using WebAPI.Business.Enums;
+using WebAPI.Business.IRepository;
+using WebClient.Helper;
 using EnumsNET;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CoFAB.Pages.Admin
+namespace WebClient.Pages.Admin
 {
     public class HomeModel : PageModel
     {
-        public ITournamentRepository TournamentRepository;
+        private readonly APIHelper ApiHelper;
+
         public List<TournamentDTO> Tournaments;
-        public HomeModel(ITournamentRepository TournamentRepository)
+        public HomeModel(APIHelper ApiHelper)
         {
-            this.TournamentRepository = TournamentRepository;
+            this.ApiHelper = ApiHelper;
         }
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            UserDTO user = SessionHelper.GetUser(HttpContext.Session);
-            Tournaments = TournamentRepository.GetTournamentsByUser(user.UserId);
+            try
+            {
+                UserDTO user = SessionHelper.GetUser(HttpContext.Session);
+                Tournaments = await ApiHelper.GetTournamentsByUser(user.UserId);
+                return Page();
+            }
+            catch (Exception e)
+            {
+                return RedirectToPage("/Error", new { message = "You can not access to this page!", backUrl = "/Player/Home" });
+            }
         }
     }
 }

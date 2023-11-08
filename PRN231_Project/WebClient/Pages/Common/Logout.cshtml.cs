@@ -1,8 +1,8 @@
-using CoFAB.Helper;
+using WebClient.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CoFAB.Pages.Common
+namespace WebClient.Pages.Common
 {
     public class LogoutModel : PageModel
     {

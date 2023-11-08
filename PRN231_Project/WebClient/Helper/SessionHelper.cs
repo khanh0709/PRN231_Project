@@ -1,7 +1,7 @@
-﻿using CoFAB.Business.DTO;
+﻿using WebAPI.Business.DTO;
 using Newtonsoft.Json;
 
-namespace CoFAB.Helper
+namespace WebClient.Helper
 {
     public class SessionHelper
     {

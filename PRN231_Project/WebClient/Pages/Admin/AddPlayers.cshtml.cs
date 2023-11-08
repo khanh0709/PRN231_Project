@@ -1,11 +1,11 @@
-﻿using CoFAB.Business.DTO;
-using CoFAB.Business.Enums;
-using CoFAB.Business.IRepository;
-using CoFAB.Helper;
+﻿using WebClient.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebAPI.Business.DTO;
+using WebAPI.Business.Enums;
+using WebAPI.Business.IRepository;
 
-namespace CoFAB.Pages.Admin
+namespace WebClient.Pages.Admin
 {
     public class AddPlayersModel : PageModel
     {
@@ -16,21 +16,21 @@ namespace CoFAB.Pages.Admin
         public int TourId { get; set; }
         public string FlashMessage { get; set; }
         public string TypeMessage { get; set; }
-        public AddPlayersModel(IUserRepository UserRepository, ITournamentRepository TournamentRepository, IAttempRepository AttempRepository) 
+        public AddPlayersModel(IUserRepository UserRepository, ITournamentRepository TournamentRepository, IAttempRepository AttempRepository)
         {
             this.UserRepository = UserRepository;
             this.TournamentRepository = TournamentRepository;
             this.AttempRepository = AttempRepository;
-        }    
+        }
 
         public IActionResult OnGet(int tourId)
         {
             Users = UserRepository.GetUsers((int)UserRole.Player);
             UserDTO user = SessionHelper.GetUser(HttpContext.Session);
             TournamentDTO tour = TournamentRepository.GetTournamentsByIdAndUser(tourId, user.UserId);
-            if(tour == null)
+            if (tour == null)
             {
-                return Redirect("/Admin/Home");   
+                return Redirect("/Admin/Home");
             }
             TourId = tourId;
             return Page();
@@ -60,7 +60,7 @@ namespace CoFAB.Pages.Admin
             var results = users.Select(user => new
             {
                 Id = user.UserId,
-                Text = user.FullName + " ("+user.UserId+")"
+                Text = user.FullName + " (" + user.UserId + ")"
             });
             return new JsonResult(results);
         }

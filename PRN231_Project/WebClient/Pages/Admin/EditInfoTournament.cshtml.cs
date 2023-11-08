@@ -1,12 +1,12 @@
-﻿using CoFAB.Business.DTO;
-using CoFAB.Business.Enums;
-using CoFAB.Business.IRepository;
-using CoFAB.DataAccess.Models;
-using CoFAB.Helper;
+﻿using WebAPI.Business.DTO;
+using WebAPI.Business.Enums;
+using WebAPI.Business.IRepository;
+using WebAPI.DataAccess.Models;
+using WebClient.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CoFAB.Pages.Admin
+namespace WebClient.Pages.Admin
 {
     public class EditInfoTournamentModel : PageModel
     {

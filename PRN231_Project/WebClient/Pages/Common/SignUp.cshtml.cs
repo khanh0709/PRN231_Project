@@ -1,13 +1,13 @@
-using CoFAB.Business.DTO;
-using CoFAB.Business.Enums;
-using CoFAB.Business.IRepository;
-using CoFAB.DataAccess.Models;
-using CoFAB.Helper;
+using WebAPI.Business.DTO;
+using WebAPI.Business.Enums;
+using WebAPI.Business.IRepository;
+using WebAPI.DataAccess.Models;
+using WebClient.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 
-namespace CoFAB.Pages.Common
+namespace WebClient.Pages.Common
 {
     public class SignUpModel : PageModel
     {

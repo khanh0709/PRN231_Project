@@ -1,8 +1,8 @@
-﻿using CoFAB.Business.IRepository;
+﻿using WebAPI.Business.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CoFAB.Pages.Admin
+namespace WebClient.Pages.Admin
 {
     public class DeleteTournamentModel : PageModel
     {

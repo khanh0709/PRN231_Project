@@ -1,12 +1,11 @@
-﻿using CoFAB.Business.DTO;
-using CoFAB.Business.Enums;
-using CoFAB.Business.IRepository;
-using CoFAB.Helper;
+﻿using WebClient.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Primitives;
+using WebAPI.Business.DTO;
+using WebAPI.Business.IRepository;
+using WebAPI.Business.Enums;
 
-namespace CoFAB.Pages.Admin
+namespace WebClient.Pages.Admin
 {
     public class CreateTournamentModel : PageModel
     {

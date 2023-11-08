@@ -1,11 +1,11 @@
-﻿using CoFAB.Business.DTO;
-using CoFAB.Business.IRepository;
-using CoFAB.Helper;
+﻿using WebAPI.Business.DTO;
+using WebAPI.Business.IRepository;
+using WebClient.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Linq;
 
-namespace CoFAB.Pages.Admin
+namespace WebClient.Pages.Admin
 {
     public class EditRoundModel : PageModel
     {

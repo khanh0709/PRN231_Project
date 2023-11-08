@@ -1,26 +1,23 @@
-﻿using CoFAB.Business.DTO;
-using CoFAB.Business.Enums;
-using CoFAB.Business.IRepository;
-using CoFAB.Business.Repository;
-using CoFAB.DataAccess.Models;
-using CoFAB.Helper;
+﻿using WebClient.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebAPI.Business.DTO;
+using WebAPI.Business.IRepository;
 
-namespace CoFAB.Pages.Admin
+namespace WebClient.Pages.Admin
 {
     public class CreateRoundModel : PageModel
     {
         public IRoundRepository RoundRepository { get; set; }
-        public ITournamentRepository TournamentRepository { get; set; }  
+        public ITournamentRepository TournamentRepository { get; set; }
         public int TourId { get; set; }
         public string FlashMessage { get; set; }
         public string TypeMessage { get; set; }
-        public CreateRoundModel(IRoundRepository RoundRepository, ITournamentRepository TournamentRepository) 
+        public CreateRoundModel(IRoundRepository RoundRepository, ITournamentRepository TournamentRepository)
         {
             this.RoundRepository = RoundRepository;
             this.TournamentRepository = TournamentRepository;
-        }   
+        }
         public IActionResult OnGet(int tourId)
         {
             UserDTO user = SessionHelper.GetUser(HttpContext.Session);

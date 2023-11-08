@@ -1,6 +1,7 @@
-using CoFAB.Business.IRepository;
-using CoFAB.Business.Repository;
-using CoFAB.DataAccess.Models;
+using WebAPI.Business.IRepository;
+using WebAPI.Business.Repository;
+using WebAPI.DataAccess.Models;
+using WebClient.Helper;
 
 namespace WebClient
 {
@@ -14,6 +15,16 @@ namespace WebClient
             builder.Services.AddRazorPages();
             builder.Services.AddSession();
 
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddDistributedMemoryCache();
+
+            builder.Services.AddScoped(sp => new HttpClient
+            {
+                BaseAddress = new Uri("http://localhost:5184/")
+
+            });
+
+            builder.Services.AddScoped<APIHelper>();
             builder.Services.AddTransient<IAttempRepository, AttempRepository>()
                 .AddDbContext<CoFABContext>(opt => builder.Configuration.GetConnectionString("DB"));
             builder.Services.AddTransient<IUserRepository, UserRepository>()
