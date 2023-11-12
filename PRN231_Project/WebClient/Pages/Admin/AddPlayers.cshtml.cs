@@ -9,25 +9,21 @@ namespace WebClient.Pages.Admin
 {
     public class AddPlayersModel : PageModel
     {
-        public IUserRepository UserRepository { get; set; }
-        public ITournamentRepository TournamentRepository { get; set; }
-        public IAttempRepository AttempRepository { get; set; }
         public List<UserDTO> Users { get; set; }
         public int TourId { get; set; }
         public string FlashMessage { get; set; }
         public string TypeMessage { get; set; }
-        public AddPlayersModel(IUserRepository UserRepository, ITournamentRepository TournamentRepository, IAttempRepository AttempRepository)
+        private readonly APIHelper ApiHelper;
+        public AddPlayersModel(APIHelper ApiHelper)
         {
-            this.UserRepository = UserRepository;
-            this.TournamentRepository = TournamentRepository;
-            this.AttempRepository = AttempRepository;
+            this.ApiHelper = ApiHelper;
         }
 
-        public IActionResult OnGet(int tourId)
+        public async Task<IActionResult> OnGet(int tourId)
         {
-            Users = UserRepository.GetUsers((int)UserRole.Player);
+            Users = await ApiHelper.GetUsers((int)UserRole.Player);
             UserDTO user = SessionHelper.GetUser(HttpContext.Session);
-            TournamentDTO tour = TournamentRepository.GetTournamentsByIdAndUser(tourId, user.UserId);
+            TournamentDTO tour = await ApiHelper.GetTournamentsByIdAndUser(tourId, user.UserId);
             if (tour == null)
             {
                 return Redirect("/Admin/Home");
@@ -36,27 +32,28 @@ namespace WebClient.Pages.Admin
             return Page();
         }
 
-        public IActionResult OnPost(List<int> playerId, int tourId)
+        public async Task<IActionResult> OnPost(List<int> playerId, int tourId)
         {
             try
             {
-                if (!TournamentRepository.ValidAcceptAndRemoveTournament(tourId)) throw new Exception();
-                AttempRepository.AddPlayers(tourId, playerId);
+                if (playerId == null || playerId.Count == 0) throw new Exception("Vui lòng chọn người chơi!");
+                if (!await ApiHelper.ValidAcceptAndRemoveTournament(tourId)) throw new Exception();
+                await ApiHelper.AddPlayers(tourId, playerId);
                 TempData["FlashMessage"] = "Thêm thành công!";
                 TempData["TypeMessage"] = "success";
                 return Redirect($"/Admin/EditTournament?id={tourId}");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                TempData["FlashMessage"] = "Thêm thất bại!";
+                TempData["FlashMessage"] = "Thêm thất bại! " + e.Message;
                 TempData["TypeMessage"] = "error";
-                return OnGet(tourId);
+                return await OnGet(tourId);
             }
         }
 
-        public IActionResult OnPostGetUsers(string? term)
+        public async Task<IActionResult> OnPostGetUsers(string? term)
         {
-            var users = UserRepository.GetPlayers(term);
+            var users = await ApiHelper.GetPlayers(term);
             var results = users.Select(user => new
             {
                 Id = user.UserId,

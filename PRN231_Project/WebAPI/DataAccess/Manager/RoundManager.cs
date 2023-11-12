@@ -13,17 +13,17 @@ namespace WebAPI.DataAccess.Manager
             this.context = context;
         }
 
-        public void CreateRound(int tournamentId, string roundName, int matchNumber)
+        public void CreateRound(Round r)
         {
             Round round = new Round();  
-            round.TournamentId = tournamentId;
-            round.RoundName = roundName;
-            round.MatchNumber = matchNumber;
+            round.TournamentId = r.TournamentId;
+            round.RoundName = r.RoundName;
+            round.MatchNumber = r.MatchNumber;
             context.Rounds.Add(round);
             context.SaveChanges();  
             
             List<Match> matches = new List<Match>();    
-            for(int i = 0; i < matchNumber; i++) 
+            for(int i = 0; i < r.MatchNumber; i++) 
             {
                 Match match = new Match();
                 match.RoundId = round.RoundId;

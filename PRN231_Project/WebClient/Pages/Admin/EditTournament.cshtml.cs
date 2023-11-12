@@ -11,35 +11,34 @@ namespace WebClient.Pages.Admin
 {
     public class EditTournamentModel : PageModel
     {
-        public ITournamentRepository TournamentRepository;
-        public IAttempRepository AttempRepository;
         public TournamentDTO Tournament;
         public List<AttempDTO> PendingPlayers;  
         public List<AttempDTO> RegisteredPlayers;
         public string FlashMessage { get; set; }
         public string TypeMessage { get; set; }
-        public EditTournamentModel(ITournamentRepository TournamentRepository, IAttempRepository AttempRepository)
+        private readonly APIHelper ApiHelper;
+
+        public EditTournamentModel(APIHelper ApiHelper)
         {
-            this.TournamentRepository = TournamentRepository;
-            this.AttempRepository = AttempRepository;
+            this.ApiHelper = ApiHelper;
         }
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
             UserDTO user = SessionHelper.GetUser(HttpContext.Session);
-            Tournament = TournamentRepository.GetTournamentsByIdAndUser(id, user.UserId);
-            TournamentRepository.UpdateStatus(Tournament.TournamentId, (int)TournamentStatus.InProgress);
-            PendingPlayers = AttempRepository.GetPlayers(id, false);
-            RegisteredPlayers = AttempRepository.GetPlayers(id, true);
+            Tournament = await ApiHelper.GetTournamentsByIdAndUser(id, user.UserId);
+            await ApiHelper.UpdateStatus(Tournament.TournamentId, (int)TournamentStatus.InProgress);
+            PendingPlayers = await ApiHelper.GetPlayers(id, false);
+            RegisteredPlayers = await ApiHelper.GetPlayers(id, true);
             return Page();
         }
 
-        public IActionResult OnPostAcceptPlayer(string attempId)
+        public async Task<IActionResult> OnPostAcceptPlayer(string attempId)
         {
             try
             {
-                if (!AttempRepository.IsValidAcceptAndRemoveAttemp(int.Parse(attempId))) throw new Exception();
-                AttempRepository.UpdateAcceptAttemp(int.Parse(attempId), true);
-                AttempDTO attemp = AttempRepository.GetAttempById(int.Parse(attempId));
+                if (!await ApiHelper.IsValidAcceptAndRemoveAttemp(int.Parse(attempId))) throw new Exception();
+                await ApiHelper.UpdateAcceptAttemp(int.Parse(attempId), true);
+                AttempDTO attemp = await ApiHelper.GetAttempById(int.Parse(attempId));
                 return new JsonResult(new
                 {
                     Account = attemp.User.FullName,
@@ -58,13 +57,13 @@ namespace WebClient.Pages.Admin
             }
         }
 
-        public IActionResult OnPostRemovePlayer(string attempId)
+        public async Task<IActionResult> OnPostRemovePlayer(string attempId)
         {
             try
             {
-                if (!AttempRepository.IsValidAcceptAndRemoveAttemp(int.Parse(attempId))) throw new Exception();
-                AttempRepository.UpdateAcceptAttemp(int.Parse(attempId), false);
-                AttempDTO attemp = AttempRepository.GetAttempById(int.Parse(attempId));
+                if (!await ApiHelper.IsValidAcceptAndRemoveAttemp(int.Parse(attempId))) throw new Exception();
+                await ApiHelper.UpdateAcceptAttemp(int.Parse(attempId), false);
+                AttempDTO attemp = await ApiHelper.GetAttempById(int.Parse(attempId));
                 return new JsonResult(new
                 {
                     Account = attemp.User.FullName,
@@ -83,13 +82,13 @@ namespace WebClient.Pages.Admin
             }
         }
 
-        public IActionResult OnPost(int tourId)
+        public async Task<IActionResult> OnPost(int tourId)
         {
             try
             {
-                if(!AttempRepository.ValidCalXp(tourId)) throw new Exception("Giải đấu đã được submit");
-                AttempRepository.CalXp(tourId);
-                TournamentRepository.UpdateStatus(tourId, (int)TournamentStatus.End);
+                if(!await ApiHelper.ValidCalXp(tourId)) throw new Exception("Giải đấu đã được submit");
+                await ApiHelper.CalXp(tourId);
+                await ApiHelper.UpdateStatus(tourId, (int)TournamentStatus.End);
                 TempData["FlashMessage"] = "Lưu thành công!";
                 TempData["TypeMessage"] = "success";
                 return Redirect("/Admin/Home");
@@ -98,7 +97,7 @@ namespace WebClient.Pages.Admin
             {
                 TempData["FlashMessage"] = "Lưu thất bại! " + ex.Message;
                 TempData["TypeMessage"] = "error";
-                return OnGet(tourId);
+                return await OnGet(tourId);
             }
         }
     }

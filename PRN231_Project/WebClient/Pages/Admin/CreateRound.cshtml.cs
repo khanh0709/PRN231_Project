@@ -8,20 +8,18 @@ namespace WebClient.Pages.Admin
 {
     public class CreateRoundModel : PageModel
     {
-        public IRoundRepository RoundRepository { get; set; }
-        public ITournamentRepository TournamentRepository { get; set; }
         public int TourId { get; set; }
         public string FlashMessage { get; set; }
         public string TypeMessage { get; set; }
-        public CreateRoundModel(IRoundRepository RoundRepository, ITournamentRepository TournamentRepository)
+        private readonly APIHelper ApiHelper;
+        public CreateRoundModel(APIHelper ApiHelper)
         {
-            this.RoundRepository = RoundRepository;
-            this.TournamentRepository = TournamentRepository;
+            this.ApiHelper = ApiHelper;
         }
-        public IActionResult OnGet(int tourId)
+        public async Task<IActionResult> OnGet(int tourId)
         {
             UserDTO user = SessionHelper.GetUser(HttpContext.Session);
-            TournamentDTO tour = TournamentRepository.GetTournamentsByIdAndUser(tourId, user.UserId);
+            TournamentDTO tour = await ApiHelper.GetTournamentsByIdAndUser(tourId, user.UserId);
             if (tour == null)
             {
                 return Redirect("/Admin/Home");
@@ -30,11 +28,17 @@ namespace WebClient.Pages.Admin
             return Page();
         }
 
-        public IActionResult OnPost(int tournamentId, string roundName, int matchNumber)
+        public async Task<IActionResult> OnPost(int tournamentId, string roundName, int matchNumber)
         {
             try
             {
-                RoundRepository.CreateRound(tournamentId, roundName, matchNumber);
+                RoundDTO round = new RoundDTO()
+                {
+                    TournamentId = tournamentId,
+                    RoundName = roundName,  
+                    MatchNumber = matchNumber   
+                };
+                await ApiHelper.CreateRound(round);
                 TempData["FlashMessage"] = "Tạo thành công!";
                 TempData["TypeMessage"] = "success";
                 return Redirect($"/Admin/EditTournament?Id={tournamentId}");

@@ -1,4 +1,5 @@
-﻿using WebAPI.DataAccess.Models;
+﻿using System.Text.Json.Serialization;
+using WebAPI.DataAccess.Models;
 
 namespace WebAPI.Business.DTO
 {
@@ -11,7 +12,7 @@ namespace WebAPI.Business.DTO
 
         public int FormatId { get; set; }
         public string? FormatName { get; set; }
-
+        [JsonIgnore]
         public virtual ICollection<TournamentDTO> Tournaments { get; set; }
     }
 }

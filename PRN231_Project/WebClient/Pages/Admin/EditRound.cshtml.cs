@@ -20,6 +20,7 @@ namespace WebClient.Pages.Admin
         public int TourId { get; set; }
         public string FlashMessage { get; set; }
         public string TypeMessage { get; set; }
+        private readonly APIHelper ApiHelper;
         public EditRoundModel(IMatchRepository MatchRepository, IRoundRepository RoundRepository, ITournamentRepository TournamentRepository, IUserRepository UserRepository)
         {
             this.RoundRepository = RoundRepository;

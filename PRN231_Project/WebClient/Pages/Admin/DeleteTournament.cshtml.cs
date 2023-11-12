@@ -1,23 +1,24 @@
 ﻿using WebAPI.Business.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebClient.Helper;
 
 namespace WebClient.Pages.Admin
 {
     public class DeleteTournamentModel : PageModel
     {
-        public ITournamentRepository TournamentRepository { get; set; }
+        private readonly APIHelper ApiHelper;
         public string FlashMessage { get; set; }
         public string TypeMessage { get; set; }
-        public DeleteTournamentModel(ITournamentRepository TournamentRepository)
+        public DeleteTournamentModel(APIHelper ApiHelper)
         {
-            this.TournamentRepository = TournamentRepository;
+            this.ApiHelper = ApiHelper;
         }
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
             try
             {
-                TournamentRepository.DeleteTournament(id);
+                await ApiHelper.DeleteTournament(id);
                 TempData["FlashMessage"] = "Xóa thành công!";
                 TempData["TypeMessage"] = "success";
             }

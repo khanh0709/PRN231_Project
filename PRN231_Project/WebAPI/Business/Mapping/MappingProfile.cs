@@ -28,7 +28,8 @@ namespace WebAPI.Business.Mapping
                 .ForMember(des => des.Tournament,
                 act => act.MapFrom(src => src.Tournament))
                 .ForMember(des => des.Matches,
-                act => act.MapFrom(src => src.Matches));
+                act => act.MapFrom(src => src.Matches))
+                .ReverseMap();
 
             CreateMap<Tournament, TournamentDTO>()
                 .ForMember(des => des.User,

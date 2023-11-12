@@ -9,6 +9,7 @@ namespace WebClient.Pages.Common
         public IActionResult OnGet()
         {
             SessionHelper.DeleteSession(HttpContext.Session, "user");
+            SessionHelper.DeleteSession(HttpContext.Session, "token");
             return Redirect("/index");
         }
     }

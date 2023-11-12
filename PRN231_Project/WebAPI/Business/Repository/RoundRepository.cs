@@ -17,10 +17,10 @@ namespace WebAPI.Business.Repository
             mapper = MapperConfig.InitializeAutomapper();
         }
 
-        public void CreateRound(int tournamentId, string roundName, int matchNumber)
+        public void CreateRound(RoundDTO round)
         {
             RoundManager manager = new RoundManager(context);
-            manager.CreateRound(tournamentId, roundName, matchNumber);
+            manager.CreateRound(mapper.Map<Round>(round));
         }
 
         public List<RoundDTO> GetRoundByTournamentId(int tourId)

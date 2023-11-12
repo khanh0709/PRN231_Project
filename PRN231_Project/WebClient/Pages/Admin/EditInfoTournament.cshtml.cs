@@ -10,33 +10,40 @@ namespace WebClient.Pages.Admin
 {
     public class EditInfoTournamentModel : PageModel
     {
-        public ITypeRepository TypeRepository;
-        public IFormatRepository FormatRepository;
-        public ITournamentRepository TournamentRepository;
         public List<TypeDTO> Types;
         public List<FormatDTO> Formats;
         public TournamentDTO Tournament;
         public string FlashMessage { get; set; }
         public string TypeMessage { get; set; }
-        public EditInfoTournamentModel(ITypeRepository TypeRepository, IFormatRepository FormatRepository, ITournamentRepository TournamentRepository)
+        private readonly APIHelper ApiHelper;
+        public EditInfoTournamentModel(APIHelper ApiHelper)
         {
-            this.TypeRepository = TypeRepository;
-            this.FormatRepository = FormatRepository;
-            this.TournamentRepository = TournamentRepository;
+            this.ApiHelper = ApiHelper;
         }
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
             UserDTO user = SessionHelper.GetUser(HttpContext.Session);
-            Types = TypeRepository.GetTypes();
-            Formats = FormatRepository.GetFormats();
-            Tournament = TournamentRepository.GetTournamentsByIdAndUser(id, user.UserId);
+            Types = await ApiHelper.GetTypes();
+            Formats = await ApiHelper.GetFormats();
+            Tournament = await ApiHelper.GetTournamentsByIdAndUser(id, user.UserId);
             return Page();
         }
-        public IActionResult OnPost(int id, string name, int typeId, int formatId, DateTime startTime, string? description, string address, string xpmodifier)
+        public async Task<IActionResult> OnPost(int id, string name, int typeId, int formatId, DateTime startTime, string? description, string address, string xpmodifier)
         {
             try
             {
-                TournamentRepository.UpdateInfoTournament(id, name, typeId, formatId, startTime, description, address, double.Parse(xpmodifier));
+                TournamentDTO tour = new TournamentDTO()
+                {
+                    TournamentId = id,
+                    Name = name,
+                    TypeId = typeId,
+                    FormatId = formatId,
+                    StartTime = startTime,
+                    Description = description,
+                    Address = address,
+                    Xpmodifier = double.Parse(xpmodifier)
+                };
+                await ApiHelper.UpdateInfoTournament(tour);
                 TempData["FlashMessage"] = "Sửa thành công!";
                 TempData["TypeMessage"] = "success";
                 return Redirect("/Admin/Home");
@@ -45,7 +52,7 @@ namespace WebClient.Pages.Admin
             {
                 TempData["FlashMessage"] = "Sửa thất bại!";
                 TempData["TypeMessage"] = "error";
-                return OnGet(id);
+                return await OnGet(id);
             }
         }
     }

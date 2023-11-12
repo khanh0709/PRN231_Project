@@ -13,6 +13,13 @@ public class TournamentManager
         this.context = context;
     }
 
+    public Tournament GetTournamentById(int tourId)
+    {
+        return this.context.Tournaments
+            .Include(t => t.Type).Include(t => t.Format)
+            .FirstOrDefault(t => t.TournamentId == tourId && t.Deleted == false);
+    }
+
     public List<Tournament> GetTournamentsByUser(int userId)
     {
         return this.context.Tournaments.Where(t => t.UserId == userId && t.Deleted == false).Include(t => t.Type).Include(t => t.Format).ToList();
@@ -29,18 +36,18 @@ public class TournamentManager
         return this.context.Tournaments.Include(t => t.Type).Include(t => t.Format).FirstOrDefault(t => t.UserId == userId && t.TournamentId == id && t.Deleted == false);
     }
 
-    public void UpdateInfoTournament(int id, string name, int typeId, int formatId, DateTime startTime, string? description, string address, double xpmodifier)
+    public void UpdateInfoTournament(Tournament tournament)
     {
-        var tour = this.context.Tournaments.FirstOrDefault(t => t.TournamentId == id);
+        var tour = this.context.Tournaments.FirstOrDefault(t => t.TournamentId == tournament.TournamentId);
         if (tour != null)
         {
-            tour.Name        = name;
-            tour.TypeId      = typeId;
-            tour.FormatId    = formatId;
-            tour.StartTime   = startTime;
-            tour.Description = description;
-            tour.Address     = address;
-            tour.Xpmodifier  = xpmodifier;
+            tour.Name        = tournament.Name;
+            tour.TypeId      = tournament.TypeId;
+            tour.FormatId    = tournament.FormatId;
+            tour.StartTime   = tournament.StartTime;
+            tour.Description = tournament.Description;
+            tour.Address     = tournament.Address;
+            tour.Xpmodifier  = tournament.Xpmodifier;
 
             this.context.Tournaments.Update(tour);
             this.context.SaveChanges();

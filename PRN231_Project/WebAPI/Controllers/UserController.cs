@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebAPI.Business.Enums;
+using WebAPI.DataAccess.Models;
 
 namespace WebAPI.Controllers
 {
@@ -38,6 +39,25 @@ namespace WebAPI.Controllers
                 userDTO.Token = GenerateToken(userDTO);
                 return Ok(userDTO);
             }
+        }
+
+        [HttpGet("GetPlayers/{term?}")]
+        public IActionResult GetPlayers(string? term)
+        {
+            var results = UserRepository.GetPlayers(term)
+            //    .Select(user => new
+            //{
+            //    Id = user.UserId,
+            //    Text = user.FullName + " (" + user.UserId + ")"
+            //})
+                ;
+            return Ok(results); 
+        }
+
+        [HttpGet("GetUsers/{term}")]
+        public IActionResult GetUsers(int role)
+        {
+            return Ok(UserRepository.GetUsers(role));
         }
 
         private string GenerateToken(UserDTO user)

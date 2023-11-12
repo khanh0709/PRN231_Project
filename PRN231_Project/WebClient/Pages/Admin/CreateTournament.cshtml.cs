@@ -9,26 +9,22 @@ namespace WebClient.Pages.Admin
 {
     public class CreateTournamentModel : PageModel
     {
-        public ITypeRepository TypeRepository;
-        public IFormatRepository FormatRepository;
-        public ITournamentRepository TournamentRepository;
         public List<TypeDTO> Types;
         public List<FormatDTO> Formats;
         public string FlashMessage { get; set; }
         public string TypeMessage { get; set; }
-        public CreateTournamentModel(ITypeRepository TypeRepository, IFormatRepository FormatRepository, ITournamentRepository TournamentRepository) 
+        private readonly APIHelper ApiHelper;
+        public CreateTournamentModel(APIHelper ApiHelper) 
         {
-            this.TypeRepository = TypeRepository;
-            this.FormatRepository = FormatRepository;
-            this.TournamentRepository = TournamentRepository;
+            this.ApiHelper = ApiHelper; 
         }
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            Types = TypeRepository.GetTypes();
-            Formats = FormatRepository.GetFormats();
+            Types = await ApiHelper.GetTypes();
+            Formats = await ApiHelper.GetFormats(); 
             return Page();
         }
-        public IActionResult OnPost(string name, int typeId, int formatId, DateTime startTime, string? description, string address, string xpmodifier)
+        public async Task<IActionResult> OnPost(string name, int typeId, int formatId, DateTime startTime, string? description, string address, string xpmodifier)
         {
             try
             {
@@ -46,7 +42,7 @@ namespace WebClient.Pages.Admin
                 tour.Xpmodifier = double.Parse(xpmodifier);
                 tour.Deleted = false;
 
-                TournamentRepository.CreateTournament(tour);
+                await ApiHelper.CreateTournament(tour);
                 TempData["FlashMessage"] = "Tạo thành công!";
                 TempData["TypeMessage"] = "success";
                 return Redirect("/Admin/Home");
@@ -55,7 +51,7 @@ namespace WebClient.Pages.Admin
             {
                 TempData["FlashMessage"] = "Tạo thất bại!";
                 TempData["TypeMessage"] = "error";
-                return OnGet();
+                return await OnGet();
             }
         }
     }

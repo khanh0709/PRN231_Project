@@ -17,13 +17,19 @@ public class TournamentRepository : ITournamentRepository
         this.mapper  = MapperConfig.InitializeAutomapper();
     }
 
+    public TournamentDTO GetTournamentById(int tourId)
+    {
+        var manager = new TournamentManager(this.context);
+        var tournaments = manager.GetTournamentById(tourId);
+        return this.mapper.Map<TournamentDTO>(tournaments);
+    }
+
     public List<TournamentDTO> GetTournamentsByUser(int userId)
     {
         var manager     = new TournamentManager(this.context);
         var tournaments = manager.GetTournamentsByUser(userId);
         return this.mapper.Map<List<TournamentDTO>>(tournaments);
     }
-
 
     public void CreateTournament(TournamentDTO tour)
     {
@@ -38,10 +44,10 @@ public class TournamentRepository : ITournamentRepository
         return this.mapper.Map<TournamentDTO>(tournament);
     }
 
-    public void UpdateInfoTournament(int id, string name, int typeId, int formatId, DateTime startTime, string? description, string address, double xpmodifier)
+    public void UpdateInfoTournament(TournamentDTO tour)
     {
         var manager = new TournamentManager(this.context);
-        manager.UpdateInfoTournament(id, name, typeId, formatId, startTime, description, address, xpmodifier);
+        manager.UpdateInfoTournament(mapper.Map<Tournament>(tour));
     }
 
     public void DeleteTournament(int id)

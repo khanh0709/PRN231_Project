@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WebAPI.Business.DTO
 {
@@ -30,11 +31,16 @@ namespace WebAPI.Business.DTO
         public double? Score { get; set; }
         public double? Score90Day { get; set; }
         public int? TotalWins { get; set; } 
-        public string? Token { get; set; } 
+        public string? Token { get; set; }
+        [JsonIgnore]
         public virtual ICollection<AttempDTO> Attemps { get; set; }
+        [JsonIgnore]
         public virtual ICollection<MatchDTO> MatchPlayer1Navigations { get; set; }
+        [JsonIgnore]
         public virtual ICollection<MatchDTO> MatchPlayer2Navigations { get; set; }
+        [JsonIgnore]
         public virtual ICollection<MatchDTO> MatchWinerNavigations { get; set; }
+        [JsonIgnore]
         public virtual ICollection<TournamentDTO> Tournaments { get; set; }
     }
 }
