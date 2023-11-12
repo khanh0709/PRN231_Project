@@ -26,5 +26,20 @@ namespace WebAPI.Controllers
             Repository.CreateRound(round);
             return Ok();
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("GetRoundByTournamentId/{tourId}")]
+        public IActionResult GetRoundByTournamentId(int tourId)
+        {
+            return Ok(Repository.GetRoundByTournamentId(tourId));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("DeleteRound/{roundId}")]
+        public IActionResult DeleteRound(int roundId)
+        {
+            Repository.DeleteRound(roundId);
+            return Ok();
+        }
     }
 }

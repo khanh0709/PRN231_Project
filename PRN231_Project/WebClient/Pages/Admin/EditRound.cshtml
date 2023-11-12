@@ -112,7 +112,7 @@
                                 </li>
                                 <li class="team team-bottom">
                                     <select name="player2Id" class="userSelect" style="width: 100%;">
-                                        <option value="@match.Player2Navigation?.UserId" selected="selected">@match.Player2Navigation?.FullName (@match.Player1Navigation?.UserId)</option>
+                                        <option value="@match.Player2Navigation?.UserId" selected="selected">@match.Player2Navigation?.FullName (@match.Player2Navigation?.UserId)</option>
                                         @foreach (UserDTO player in Model.Players)
                                         {
                                             <option value="@player.UserId">@player.FullName (@player.UserId)</option>

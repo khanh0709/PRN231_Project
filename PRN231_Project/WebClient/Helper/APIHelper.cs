@@ -173,5 +173,44 @@ namespace WebClient.Helper
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"api/Round/CreateRound/", round);
             response.EnsureSuccessStatusCode();
         }
+
+        public async Task<List<UserDTO>> GetPlayersInTournament(int tourId, string? term)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/User/GetPlayersInTournament/{tourId}/{term}");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            List<UserDTO> result = JsonConvert.DeserializeObject<List<UserDTO>>(responseBody);
+            return result;
+        }
+
+        public async Task<List<RoundDTO>> GetRoundByTournamentId(int tourId)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/Round/GetRoundByTournamentId/{tourId}");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            List<RoundDTO> result = JsonConvert.DeserializeObject<List<RoundDTO>>(responseBody);
+            return result;
+        }
+
+        public async Task<List<MatchDTO>> GetMatchesByRoundId(int tourId)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/Match/GetMatchesByRoundId/{tourId}");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            List<MatchDTO> result = JsonConvert.DeserializeObject<List<MatchDTO>>(responseBody);
+            return result;
+        }
+
+        public async Task SaveMatches(SaveMatchDTO model)
+        {
+            HttpResponseMessage response = await _httpClient.PutAsJsonAsync($"api/Match/SaveMatches", model);
+            response.EnsureSuccessStatusCode();
+        }
+        
+        public async Task DeleteRound(int roundId)
+        {
+            HttpResponseMessage response = await _httpClient.DeleteAsync($"api/Round/DeleteRound/{roundId}");
+            response.EnsureSuccessStatusCode();
+        }
     }
 }

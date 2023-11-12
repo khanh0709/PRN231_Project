@@ -60,6 +60,12 @@ namespace WebAPI.Controllers
             return Ok(UserRepository.GetUsers(role));
         }
 
+        [HttpGet("GetPlayersInTournament/{tourId}/{term?}")]
+        public IActionResult GetPlayersInTournament(int tourId, string? term)
+        {
+            return Ok(UserRepository.GetPlayersInTournament(tourId, term));
+        }
+
         private string GenerateToken(UserDTO user)
         {
             var jwtTokenHandle = new JwtSecurityTokenHandler();

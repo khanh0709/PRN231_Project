@@ -9,10 +9,6 @@ namespace WebClient.Pages.Admin
 {
     public class EditRoundModel : PageModel
     {
-        public IRoundRepository RoundRepository { get; set; }   
-        public IMatchRepository MatchRepository { get; set; }   
-        public ITournamentRepository TournamentRepository { get; set; } 
-        public IUserRepository UserRepository { get; set; }
         public List<RoundDTO> Rounds { get; set; }
         public List<MatchDTO> Matches { get; set; }
         public List<UserDTO> Players { get; set; }
@@ -21,27 +17,24 @@ namespace WebClient.Pages.Admin
         public string FlashMessage { get; set; }
         public string TypeMessage { get; set; }
         private readonly APIHelper ApiHelper;
-        public EditRoundModel(IMatchRepository MatchRepository, IRoundRepository RoundRepository, ITournamentRepository TournamentRepository, IUserRepository UserRepository)
+        public EditRoundModel(APIHelper ApiHelper)
         {
-            this.RoundRepository = RoundRepository;
-            this.MatchRepository = MatchRepository;
-            this.TournamentRepository = TournamentRepository;
-            this.UserRepository = UserRepository;
+            this.ApiHelper = ApiHelper;
         }
 
-        public IActionResult OnGet(int tourId)
+        public async Task<IActionResult> OnGet(int tourId)
         {
             TourId = tourId;
             UserDTO user = SessionHelper.GetUser(HttpContext.Session);
-            TournamentDTO tour = TournamentRepository.GetTournamentsByIdAndUser(tourId, user.UserId);
+            TournamentDTO tour = await ApiHelper.GetTournamentsByIdAndUser(tourId, user.UserId);
             if (tour != null)
             {
-                Players = UserRepository.GetPlayersInTournament(tourId, null);
-                Rounds = RoundRepository.GetRoundByTournamentId(tourId);
+                Players = await ApiHelper.GetPlayersInTournament(tourId, null);
+                Rounds = await ApiHelper.GetRoundByTournamentId(tourId);
                 if(Rounds != null && Rounds.Count > 0)
                 {
                     RoundId = Rounds[0].RoundId;
-                    Matches = MatchRepository.GetMatchesByRoundId(RoundId);
+                    Matches = await ApiHelper.GetMatchesByRoundId(RoundId);
                 }
                 return Page();
             }
@@ -49,7 +42,7 @@ namespace WebClient.Pages.Admin
                 return Redirect("/Admin/Home");
         }
 
-        public IActionResult OnPostSave(int tourId, int roundId, List<int?> player1Id, List<int?> player2Id, List<int?> winerId)
+        public async Task<IActionResult> OnPostSave(int tourId, int roundId, List<int?> player1Id, List<int?> player2Id, List<int?> winerId)
         {
             try
             {
@@ -62,33 +55,40 @@ namespace WebClient.Pages.Admin
                     if (winerId[i] == 0)
                         winerId[i] = null;
                 }
-                MatchRepository.SaveMatches(roundId, player1Id, player2Id, winerId);
+                SaveMatchDTO model = new SaveMatchDTO()
+                {
+                    roundId = roundId,
+                    player1Id = player1Id,
+                    player2Id = player2Id,
+                    winerId = winerId
+                };
+                await ApiHelper.SaveMatches(model);
                 TempData["FlashMessage"] = "Lưu thành công!";
                 TempData["TypeMessage"] = "success";
-                return OnPostMatch(tourId, roundId);
+                return await OnPostMatch(tourId, roundId);
             }
             catch (Exception)
             {
                 TempData["FlashMessage"] = "Lưu thất bại!";
                 TempData["TypeMessage"] = "error";
-                return OnGet(tourId);
+                return await OnGet(tourId);
                 throw;
             }
         }
 
-        public IActionResult OnPostMatch(int tourId, int roundId)
+        public async Task<IActionResult> OnPostMatch(int tourId, int roundId)
         {
             TourId = tourId;
             UserDTO user = SessionHelper.GetUser(HttpContext.Session);
-            TournamentDTO tour = TournamentRepository.GetTournamentsByIdAndUser(tourId, user.UserId);
+            TournamentDTO tour = await ApiHelper.GetTournamentsByIdAndUser(tourId, user.UserId);
             if (tour != null)
             {
-                Players = UserRepository.GetPlayersInTournament(tourId, null);
-                Rounds = RoundRepository.GetRoundByTournamentId(tourId);
+                Players = await ApiHelper.GetPlayersInTournament(tourId, null);
+                Rounds = await ApiHelper.GetRoundByTournamentId(tourId);
                 if (Rounds != null && Rounds.Count > 0)
                 {
                     RoundId = roundId;
-                    Matches = MatchRepository.GetMatchesByRoundId(RoundId);
+                    Matches = await ApiHelper.GetMatchesByRoundId(RoundId);
                 }
                 return Page();
             }
@@ -96,14 +96,14 @@ namespace WebClient.Pages.Admin
                 return Redirect("/Admin/Home");
         }
 
-        public IActionResult OnPostDelete(int tourId, int roundId)
+        public async Task<IActionResult> OnPostDelete(int tourId, int roundId)
         {
             try
             {
-                RoundRepository.DeleteRound(roundId);
+                await ApiHelper.DeleteRound(roundId);
                 TempData["FlashMessage"] = "Xóa thành công!";
                 TempData["TypeMessage"] = "success";
-                return OnGet(tourId);
+                return await OnGet(tourId);
             }
             catch (Exception)
             {
@@ -114,9 +114,9 @@ namespace WebClient.Pages.Admin
             }
         }
 
-        public IActionResult OnPostGetUsers(string? term, int tourId)
+        public async Task<IActionResult> OnPostGetUsers(string? term, int tourId)
         {
-            var users = UserRepository.GetPlayersInTournament(tourId, term);
+            var users = await ApiHelper.GetPlayersInTournament(tourId, term);
             users.Add(new UserDTO()
             {
                 UserId = 0
