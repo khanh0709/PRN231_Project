@@ -212,5 +212,21 @@ namespace WebClient.Helper
             HttpResponseMessage response = await _httpClient.DeleteAsync($"api/Round/DeleteRound/{roundId}");
             response.EnsureSuccessStatusCode();
         }
+
+        public async Task<List<UserDTO>> GetRanking(string? city, string? term)
+        {
+            string url = "api/User/GetRanking";
+            if (!string.IsNullOrEmpty(city))
+                url += $"/{city}";
+            else
+                url += "/0";
+            if (!string.IsNullOrEmpty(term)) 
+                url += $"/{term}";
+            HttpResponseMessage response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            List<UserDTO> result = JsonConvert.DeserializeObject<List<UserDTO>>(responseBody);
+            return result;
+        }
     }
 }

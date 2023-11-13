@@ -66,6 +66,13 @@ namespace WebAPI.Controllers
             return Ok(UserRepository.GetPlayersInTournament(tourId, term));
         }
 
+        [HttpGet("GetRanking/{city?}/{term?}")]
+        public IActionResult GetRanking(string? city, string? term)
+        {
+            if (city == "0") city = null;
+            return Ok(UserRepository.GetRanking(city, term));
+        }
+
         private string GenerateToken(UserDTO user)
         {
             var jwtTokenHandle = new JwtSecurityTokenHandler();

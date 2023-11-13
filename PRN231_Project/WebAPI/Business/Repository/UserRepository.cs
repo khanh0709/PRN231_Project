@@ -78,5 +78,18 @@ namespace WebAPI.Business.Repository
             UserManager manager = new UserManager(context);
             manager.UpdateUser(mapper.Map<User>(user)); 
         }
+
+        public List<UserDTO> GetRanking(string? city, string? term) 
+        {
+            UserManager manager = new UserManager(context);
+            List<User> users = manager.GetPlayers(city, term);
+            List<UserDTO> rs = new List<UserDTO>();
+            foreach (User user in users) 
+            {
+                UserDTO userDTO = mapper.Map<UserDTO>(user);
+                rs.Add(GetStatistic(userDTO));
+            }
+            return rs.OrderByDescending(u => u.Score).ToList();
+        }
     }
 }

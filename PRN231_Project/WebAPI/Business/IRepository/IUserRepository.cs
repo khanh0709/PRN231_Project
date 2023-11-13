@@ -13,5 +13,6 @@ namespace WebAPI.Business.IRepository
         public UserDTO GetUserByAcc(string acc);
         public void AddPlayer(User u);
         public void UpdateUser(UserDTO user);
+        public List<UserDTO> GetRanking(string? city, string? term);
     }
 }

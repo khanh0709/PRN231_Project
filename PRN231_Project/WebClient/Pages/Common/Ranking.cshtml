@@ -1,0 +1,153 @@
+﻿@page
+@using WebAPI.Business.DTO;
+@model WebClient.Pages.Common.RankingModel
+@{
+    Layout = "PlayerShared/_Layout";
+}
+<style>
+    table {
+        border-color: #a7733f;
+    }
+
+        table th {
+            background-color: #873229;
+            color: #fff;
+        }
+
+        table tr:nth-child(2n) {
+            background: transparent;
+        }
+
+        table tr:nth-child(odd) {
+            background: rgba(135, 50, 41, 0.1);
+        }
+
+        table td, table th {
+            padding: 3px 8px;
+        }
+
+    table {
+        border: 2px solid #a7733f;
+        width: 100%;
+    }
+
+    .tour {
+        cursor: pointer;
+        background-color: #873229;
+        color: #fff;
+        border: 2px solid #a7733f;
+        border-radius: 1px;
+        margin: 20px 0;
+        padding: 8px 16px;
+    }
+
+    .tour-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .tour-status {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .tour-list {
+        margin: 60px 0;
+    }
+
+    .tour-body {
+        margin: 20px 0;
+    }
+
+    .card {
+        border: none;
+    }
+
+    .table-tour th {
+        width: 20%;
+    }
+
+    .table-result th {
+        width: 90%;
+    }
+
+    .card {
+        background: transparent;
+    }
+
+    .send-icon {
+        padding: 4px;
+    }
+
+    .send-btn {
+        background: transparent;
+        border: none;
+        color: white;
+    }
+</style>
+<div class="block-table">
+    <table>
+        <tbody>
+            <tr>
+                <form id="rank-form" method="post">
+                    <th colspan="2">
+                    <select name="city" class="form-select" onchange="submitForm()">
+                            <option selected value="">Tất cả</option>
+                            @foreach (Province p in Model.Provinces)
+                            {
+                                @if(p.Code == Model.City)
+                                {
+                                    <option selected value="@p.Code">@p.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@p.Code">@p.Name</option>
+                                }
+                            }
+                        </select>
+                    </th>
+                    <th colspan="2"></th>
+                    <th colspan="2">
+                        <div class="d-flex flex-nowrap">
+                            <input name="term" placeholder="Tìm kiếm" class="form-control" type="text" value="@Model.Term"/>
+                        <button style="background: transparent; border: none; padding: 4px 12px;">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        </div>
+                    </th>
+                </form>
+            </tr>
+            <tr>
+                <th>STT</th>
+                <th>Tài Khoản</th>
+                <th>Tên</th>
+                <th>Điểm</th>
+                <th>City Rank</th>
+                <th>Global Rank</th>
+            </tr>
+            @{int i = 0;}
+            @foreach(UserDTO player in Model.Players)
+            {
+                {
+                    i++;
+                }
+                <tr>
+                    <td>@i</td>
+                    <td>@player.Account</td>
+                    <td>@player.FullName</td>
+                    <td>@player.Score</td>
+                    <td>@player.CityRank</td>
+                    <td>@player.GlobalRank</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    function submitForm()
+    {
+        var form = document.querySelector("#rank-form");
+        form.submit();
+    }
+</script>
