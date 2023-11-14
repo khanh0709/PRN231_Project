@@ -8,11 +8,11 @@
 <form id="profile-form" method="post">
     <input hidden name="account" value="@Model.User?.Account" />
     <label>Id</label>
-    <input readonly class="form-control" type="text" value="@Model.User?.UserId" />
+    <input readonly name="id" class="form-control" type="number" value="@Model.User?.UserId" />
     <label>Tên</label>
-    <input name="fullname" class="form-control" type="text" value="@Model.User?.FullName" />
+    <input name="fullname" required class="form-control" type="text" value="@Model.User?.FullName" />
     <label>Email</label>
-    <input name="email" class="form-control" type="text" value="@Model.User?.Email" />
+    <input name="email" required class="form-control" type="text" value="@Model.User?.Email" />
     <label>City</label>
     <select name="province" class="form-select">
         @foreach (Province p in Model.Provinces)

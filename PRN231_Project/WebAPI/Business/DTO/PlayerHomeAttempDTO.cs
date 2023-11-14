@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-
-namespace WebAPI.Business.DTO
+﻿namespace WebAPI.Business.DTO
 {
-    public partial class AttempDTO
+    public class PlayerHomeAttempDTO
     {
         public int AttempId { get; set; }
         public double? Xpgained { get; set; }
@@ -13,9 +9,6 @@ namespace WebAPI.Business.DTO
         public int? TotalWins { get; set; }
         public DateTime? Date { get; set; }
         public bool? Accepted { get; set; }
-        [JsonIgnore]
-        public virtual TournamentDTO? Tournament { get; set; }
-        [JsonIgnore]
-        public virtual UserDTO? User { get; set; }
+        
     }
 }

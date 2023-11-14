@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebAPI.Business.IRepository;
 
 namespace WebAPI.Controllers
@@ -14,7 +13,7 @@ namespace WebAPI.Controllers
         {
             this.Repository = Repository;
         }
-        
+
         [HttpGet("GetAttempById/{attempId}")]
         public IActionResult GetAttempById(int attempId)
         {
@@ -38,7 +37,7 @@ namespace WebAPI.Controllers
         {
             return Ok(Repository.ValidCalXp(tourId));
         }
-        
+
         [HttpPut("CalXp/{tourId}")]
         public IActionResult CalXp(int tourId)
         {
@@ -57,6 +56,20 @@ namespace WebAPI.Controllers
         public IActionResult AddPlayers(int tourId, List<int> playerId)
         {
             Repository.AddPlayers(tourId, playerId);
+            return Ok();
+        }
+
+        [HttpGet("CkeckValidRequest/{tourId}/{userId}")]
+        public IActionResult CkeckValidRequest(int tourId, int userId)
+        {
+            bool isValid = Repository.ValidRequest(tourId, userId);
+            return Ok(isValid);
+        }
+
+        [HttpGet("CreateRequest/{tourId}/{userId}")]
+        public IActionResult CreateRequest(int tourId, int userId)
+        {
+            Repository.CreateRequest(tourId, userId);
             return Ok();
         }
     }

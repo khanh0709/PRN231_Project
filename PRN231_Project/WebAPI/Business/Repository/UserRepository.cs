@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using WebAPI.Business.DTO;
 using WebAPI.Business.Enums;
 using WebAPI.Business.IRepository;
 using WebAPI.Business.Mapping;
 using WebAPI.DataAccess.Manager;
 using WebAPI.DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI.Business.Repository
 {
@@ -42,8 +42,9 @@ namespace WebAPI.Business.Repository
         }
         public UserDTO GetStatistic(UserDTO userDTO)
         {
+            UserManager m = new UserManager(context);
+            var users = mapper.Map<List<UserDTO>>(m.GetAllPlayers());
             DateTime ninetyDaysAgo = DateTime.Now.AddDays(-90);
-            var users = mapper.Map<List<UserDTO>>(context.Users.Include(u => u.Attemps).Where(u => u.Role == (int)UserRole.Player).ToList());
             for (int i = 0; i < users.Count(); i++)
             {
                 var attemps = users[i].Attemps.Where(a => a.Xpgained != null && a.TotalWins != null && a.Date != null);
@@ -67,16 +68,22 @@ namespace WebAPI.Business.Repository
             return mapper.Map<UserDTO>(m.GetUserByAcc(acc));
         }
 
-        public void AddPlayer(User u)
+        public void AddPlayer(UserDTO u)
         {
             UserManager m = new UserManager(context);
-            m.AddPlayer(u);
+            m.AddPlayer(mapper.Map<User>(u));
         }
 
         public void UpdateUser(UserDTO user)
         {
             UserManager manager = new UserManager(context);
-            manager.UpdateUser(mapper.Map<User>(user)); 
+            manager.UpdateUser(mapper.Map<User>(user));
+        }
+
+        public UserDTO GetUserById(int id)
+        {
+            UserManager manager = new UserManager(context);
+            return mapper.Map<UserDTO>(manager.GetUserById(id));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using WebAPI.Business.Enums;
+﻿using Microsoft.EntityFrameworkCore;
+using WebAPI.Business.Enums;
 using WebAPI.DataAccess.Models;
 
 namespace WebAPI.DataAccess.Manager
@@ -32,7 +33,7 @@ namespace WebAPI.DataAccess.Manager
 
         public List<User> GetPlayersInTournament(int tourId, string? term)
         {
-            if(term != null)
+            if (term != null)
             {
                 term = term.Trim().ToLower();
                 return context.Attemps
@@ -60,17 +61,27 @@ namespace WebAPI.DataAccess.Manager
 
         public void UpdateUser(User user)
         {
-            var updateUser = context.Users.FirstOrDefault(u => u.UserId == user.UserId);    
-            if(updateUser != null)
+            var updateUser = context.Users.FirstOrDefault(u => u.UserId == user.UserId);
+            if (updateUser != null)
             {
                 updateUser.FullName = user.FullName;
-                updateUser.Email = user.Email;  
+                updateUser.Email = user.Email;
                 updateUser.City = user.City;
                 updateUser.Password = user.Password;
 
                 context.Users.Update(updateUser);
                 context.SaveChanges();
             }
+        }
+
+        public User GetUserById(int id)
+        {
+            return context.Users.FirstOrDefault(u => u.UserId == id);
+        }
+
+        public List<User> GetAllPlayers()
+        {
+            return context.Users.Include(u => u.Attemps).Where(u => u.Role == (int)UserRole.Player).ToList();
         }
     }
 }

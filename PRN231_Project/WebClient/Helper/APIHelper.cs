@@ -1,7 +1,5 @@
-﻿using WebAPI.Business.DTO;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using WebAPI.DataAccess.Models;
+﻿using Newtonsoft.Json;
+using WebAPI.Business.DTO;
 
 namespace WebClient.Helper
 {
@@ -14,7 +12,7 @@ namespace WebClient.Helper
             _httpClient = httpClient;
             _session = httpContextAccessor.HttpContext.Session;
             string token = SessionHelper.GetObjectFromJson<string>(_session, "token");
-            if (!string.IsNullOrEmpty(_session.GetString("token")))
+            if (!string.IsNullOrEmpty(token))
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             }
@@ -171,6 +169,57 @@ namespace WebClient.Helper
         public async Task CreateRound(RoundDTO round)
         {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"api/Round/CreateRound/", round);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<UserDTO> GetStatistic(UserDTO user)
+        {
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"api/User/GetStatistic", user);
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            UserDTO result = JsonConvert.DeserializeObject<UserDTO>(responseBody);
+            return result;
+        }
+
+        public async Task<List<TournamentDTO>> GetUpComingTournament(int userId)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/User/GetUpComingTournament/{userId}");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            List<TournamentDTO> result = JsonConvert.DeserializeObject<List<TournamentDTO>>(responseBody);
+            return result;
+        }
+
+        public async Task<List<TournamentDTO>> GetRegisteredTournament(int userId)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/User/GetRegisteredTournament/{userId}");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            List<TournamentDTO> result = JsonConvert.DeserializeObject<List<TournamentDTO>>(responseBody);
+            return result;
+        }
+
+        public async Task<List<TournamentDTO>> GetEndTournament(int userId)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/User/GetEndTournament/{userId}");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            List<TournamentDTO> result = JsonConvert.DeserializeObject<List<TournamentDTO>>(responseBody);
+            return result;
+        }
+
+        public async Task<bool> CheckValidRequest(int tourId, int userId)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/Attemp/CkeckValidRequest/{tourId}/{userId}");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            bool result = JsonConvert.DeserializeObject<bool>(responseBody);
+            return result;
+        }
+
+        public async Task CreateRequest(int tourId, int userId)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync($"api/Attemp/CreateRequest/{tourId}/{userId}");
             response.EnsureSuccessStatusCode();
         }
     }

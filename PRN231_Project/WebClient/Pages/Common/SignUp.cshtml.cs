@@ -1,11 +1,10 @@
-using WebAPI.Business.DTO;
-using WebAPI.Business.Enums;
-using WebAPI.Business.IRepository;
-using WebAPI.DataAccess.Models;
-using WebClient.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using WebAPI.Business.DTO;
+using WebAPI.Business.Enums;
+using WebAPI.Business.IRepository;
+using WebClient.Helper;
 
 namespace WebClient.Pages.Common
 {
@@ -13,9 +12,12 @@ namespace WebClient.Pages.Common
     {
         public IUserRepository UserRepository { get; set; }
         public List<Province> Provinces;
-        public SignUpModel(IUserRepository userRepository)
+        private HttpClient _httpClient;
+
+        public SignUpModel(IUserRepository userRepository, HttpClient httpClient)
         {
             UserRepository = userRepository;
+            _httpClient = httpClient;
         }
 
         public async Task OnGetAsync()
@@ -31,28 +33,36 @@ namespace WebClient.Pages.Common
                 }
             }
         }
-        public IActionResult OnPostSubmit(string fullname, string? email, string city, string acc, string password)
+        public async Task<IActionResult> OnPostSubmit(string fullname, string? email, string city, string acc, string password)
         {
-            UserDTO u = UserRepository.GetUserByAcc(acc);
-            if (u == null)
+            var response = await _httpClient.GetAsync($"http://localhost:5184/api/User/GetUsersByAcc/{acc}");
+            if (response.IsSuccessStatusCode)
             {
-                User newUser = new User();
-                newUser.FullName = fullname;
-                newUser.Email = email;
-                newUser.City = city;
-                newUser.Authorization = "player";
-                newUser.Account = acc;
-                newUser.Password = password;
-                newUser.Role = (int?)UserRole.Player;
-                UserRepository.AddPlayer(newUser);
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "user", newUser);
-                return new JsonResult(new { success = true, url = "/Player/Home" });
+                return new JsonResult(new { success = false });
             }
-            else
+            UserDTO newUser = new UserDTO();
+            newUser.FullName = fullname;
+            newUser.Email = email;
+            newUser.City = city;
+            newUser.Authorization = "player";
+            newUser.Account = acc;
+            newUser.Password = password;
+            newUser.Role = (int?)UserRole.Player;
+
+            response = await _httpClient.PostAsJsonAsync("http://localhost:5184/api/User/AddPlayer", newUser);
+            if (!response.IsSuccessStatusCode)
             {
                 return new JsonResult(new { success = false });
             }
 
+            response = await _httpClient.GetAsync($"http://localhost:5184/api/User/GetUsersByAcc/{acc}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                UserDTO user = JsonConvert.DeserializeObject<UserDTO>(content);
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "user", user);
+            }
+            return new JsonResult(new { success = true, url = "/Player/Home" });
         }
     }
 }

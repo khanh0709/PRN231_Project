@@ -1,34 +1,116 @@
 ﻿@page
 @using WebAPI.Business.DTO;
+@using WebClient.Helper;
 @model WebClient.Pages.Admin.ProfileModel
 @{
     Layout = "AdminShared/_Layout";
 }
 <h1>Admin Profile</h1>
 <p style="font-weight: 500;">CoFAB Event Management Software</p>
+<div class="py-3">
+    <button type="button" onclick="EnableEdit()" class="fab-btn">Edit Profile</button>
+</div>
 <form id="profile-form" method="post">
     <label>Id</label>
-    <input readonly class="form-control" type="text" value="@Model.User?.UserId" />
+    <input readonly id="id" class="form-control" type="text" value="@Model.User?.UserId" />
     <label>Tên</label>
-    <input readonly name="fullname" class="form-control" type="text" value="@Model.User?.FullName" />
+    <input readonly name="fullname" id="name" required class="form-control editable" type="text" value="@Model.User?.FullName" />
     <label>Email</label>
-    <input readonly name="email" class="form-control" type="text" value="@Model.User?.Email" />
+    <input readonly name="email" id="email" required class="form-control editable" type="text" value="@Model.User?.Email" />
     <label>City</label>
-    <select disabled class="form-select">
-        @foreach(Province p in Model.Provinces)
+    <select disabled id="city" class="form-select selectable">
+        @if (Model.Provinces != null)
         {
-            @if(p.Code == Model.User?.City)
-            {
-                <option selected value="@p.Code">@p.Name</option>
 
-            }
-            else
+            @foreach (Province p in Model.Provinces)
             {
-                <option value="@p.Code">@p.Name</option>
+                @if (p.Code == Model.User?.City)
+                {
+                    <option selected value="@p.Code">@p.Name</option>
+
+                }
+                else
+                {
+                    <option value="@p.Code">@p.Name</option>
+                }
             }
         }
+        else
+        {
+            <option value="null">@Model.err</option>
+        }
     </select>
-@*    <div class="py-3">
-        <button class="fab-btn">Lưu</button>
-    </div>*@
+    <i id="noti" style="color: red"></i>
+    <div class="pass" style="display:none">
+        <label>Mật khẩu cũ</label>
+        <input id="oldPass" class="form-control" type="password" />
+        <label>Mật khẩu mới</label>
+        <input id="newPass" class="form-control" type="password" />
+        <label>Xác nhận mật khẩu</label>
+        <input id="confirmPass" class="form-control" type="password" />
+    </div>
+    <div style="display:none" class="py-3 save">
+        <button type="button" onclick="Save()" class="fab-btn">Lưu</button>
+    </div>
 </form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="text/javascript">
+    function EnableEdit() {
+        $(".editable").removeAttr("readonly");
+        $(".selectable").removeAttr("disabled");
+        $(".save").show();
+        $(".pass").show();
+    }
+
+    function Save() {
+        id = $("#id").val();
+        oldPass = $("#oldPass").val();
+        newPass = $("#newPass").val();
+        confirmPass = $("#confirmPass").val();
+        if (oldPass.trim() != '' || newPass.trim() != '' || confirmPass.trim() != '') {
+            if (oldPass.trim() == '' || newPass.trim() == '' || confirmPass.trim() == '') {
+                $("#noti").html("Nếu muốn thay đổi mật khẩu cần nhập đủ 3 trường phía dưới");
+                return;
+            }
+            else {
+                if (confirmPass != newPass) {
+                    $("#noti").html("Mật khẩu xác thực chưa chính xác");
+                    return;
+                }
+            }
+        }
+        var dataToSend = {
+            id: parseInt(id, 10),
+            name: $("#name").val(),
+            email: $("#email").val(),
+            city: $("#city").val(),
+            oldPass: oldPass,
+            newPass: newPass
+        };
+        $.ajax({
+            url: "http://localhost:5184/api/User/EditProfile",
+            type: "put",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(dataToSend),
+            headers: {
+                'Authorization': 'Bearer ' + '@Model.token'
+            },
+            success: function (result, status, xhr) {
+                $(".editable").prop("readonly", true);
+                $(".selectable").prop("disabled", true);
+                $(".save").hide();
+                $("#oldPass").val('');
+                $("#newPass").val('');
+                $("#confirmPass").val('');
+                $(".pass").hide();
+                $("#noti").html("");
+
+            },
+            error: function (xhr, status, error) {
+                $("#noti").html("Mật khẩu cũ chưa chính xác");
+            }
+        });
+    }
+</script>
