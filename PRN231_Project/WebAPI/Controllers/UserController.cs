@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using WebAPI.Business.Enums;
 using WebAPI.DataAccess.Models;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace WebAPI.Controllers
 {
@@ -66,11 +67,19 @@ namespace WebAPI.Controllers
             return Ok(UserRepository.GetPlayersInTournament(tourId, term));
         }
 
-        [HttpGet("GetRanking/{city?}/{term?}")]
-        public IActionResult GetRanking(string? city, string? term)
+        [EnableQuery]
+        [HttpPost("GetRanking")]
+        public ActionResult<List<UserDTO>> GetRanking(RankingDTO model)
         {
-            if (city == "0") city = null;
-            return Ok(UserRepository.GetRanking(city, term));
+            if (model.city == "0") model.city = null;
+            return UserRepository.GetRanking(model.city, model.term);
+        }
+
+        [EnableQuery]
+        [HttpGet("GetTotalPlayer/{role}")]
+        public ActionResult<int> GetTotalPlayer(int role)
+        {
+            return UserRepository.GetUsers(role).Count();
         }
 
         private string GenerateToken(UserDTO user)

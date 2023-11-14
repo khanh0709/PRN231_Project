@@ -2,7 +2,7 @@
 @using WebAPI.Business.DTO;
 @model WebClient.Pages.Common.RankingModel
 @{
-    Layout = "PlayerShared/_Layout";
+    Layout = "CommonShared/_Layout";
 }
 <style>
     table {
@@ -85,69 +85,140 @@
         border: none;
         color: white;
     }
+
+    .mh-100vh{
+        min-height: 80vh;
+    }
 </style>
-<div class="block-table">
-    <table>
-        <tbody>
-            <tr>
-                <form id="rank-form" method="post">
+<div class="mh-100vh " style="background-color: white;">
+    <div class="block-table container py-4 py-lg-5 my-3">
+        <table>
+            <thead>
+                <tr>
+                    <form id="rank-form" method="post">
                     <th colspan="2">
-                    <select name="city" class="form-select" onchange="submitForm()">
-                            <option selected value="">Tất cả</option>
-                            @foreach (Province p in Model.Provinces)
-                            {
-                                @if(p.Code == Model.City)
+                        <select id="city" name="city" class="form-select">
+                            <option selected value="0">Tất cả</option>
+                                @foreach (Province p in Model.Provinces)
                                 {
+                                    @if (p.Code == Model.City)
+                                    {
                                     <option selected value="@p.Code">@p.Name</option>
-                                }
-                                else
-                                {
+                                    }
+                                    else
+                                    {
                                     <option value="@p.Code">@p.Name</option>
+                                    }
                                 }
-                            }
                         </select>
                     </th>
                     <th colspan="2"></th>
                     <th colspan="2">
                         <div class="d-flex flex-nowrap">
-                            <input name="term" placeholder="Tìm kiếm" class="form-control" type="text" value="@Model.Term"/>
-                        <button style="background: transparent; border: none; padding: 4px 12px;">
-                            <i class="bi bi-search"></i>
-                        </button>
+                            <input id="term" name="term" placeholder="Tìm kiếm" class="form-control" type="text" value="@Model.Term" />
+                            <button type="button" class="search-btn" style="background: transparent; border: none; padding: 4px 12px;">
+                                <i class="bi bi-search" style="color: white; font-size: 20px;"></i>
+                            </button>
                         </div>
                     </th>
-                </form>
-            </tr>
-            <tr>
-                <th>STT</th>
-                <th>Tài Khoản</th>
-                <th>Tên</th>
-                <th>Điểm</th>
-                <th>City Rank</th>
-                <th>Global Rank</th>
-            </tr>
-            @{int i = 0;}
-            @foreach(UserDTO player in Model.Players)
-            {
-                {
-                    i++;
-                }
-                <tr>
-                    <td>@i</td>
-                    <td>@player.Account</td>
-                    <td>@player.FullName</td>
-                    <td>@player.Score</td>
-                    <td>@player.CityRank</td>
-                    <td>@player.GlobalRank</td>
+                    </form>
                 </tr>
-            }
-        </tbody>
-    </table>
+                <tr>
+                    <th>STT</th>
+                    <th>Tài Khoản</th>
+                    <th>Tên</th>
+                    <th>Điểm</th>
+                    <th>City Rank</th>
+                    <th>Global Rank</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+    </div>
+    <div id="pag" style="margin-top: 20px;">
+        <div id="pagination-container" class="d-flex justify-content-center">
+            <ul class="pagination"></ul>
+        </div>
+    </div>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
 <script>
-    function submitForm()
-    {
-        var form = document.querySelector("#rank-form");
-        form.submit();
-    }
+    
+    $(document).ready(function () {
+        var pageSize = 3;
+        loadData(1);
+        //function submitForm() {
+        //    let page = parseInt($('.active .page-link').val());
+        //    loadData(page);
+        //}
+        function RenderPlayers(data, skip)
+        {
+            $('#tbody').html('');
+            let content = ``;
+            let stt = skip + 1;
+            data.forEach((player, index) => {
+                content += `
+                    <tr>
+                        <td>${stt}</td>
+                        <td>${player.account}</td>
+                        <td>${player.fullName}</td>
+                        <td>${player.score}</td>
+                        <td>${player.cityRank}</td>
+                        <td>${player.globalRank}</td>
+                    </tr>
+                `;
+                stt++;
+            })
+            $('#tbody').html(content);
+        }
+        function loadData(pageNumber) {
+            let skip = pageSize * (pageNumber - 1);
+            $.ajax({
+                url: 'http://localhost:5184/api/User/GetRanking?$top=' + pageSize + '&$skip=' + skip,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ "city": $('#city').find(":selected").val(), "term": $('#term').val() }),
+                success: function (result) {
+                    RenderPlayers(result, skip);
+                }
+            });
+
+            $.ajax({
+                url: 'http://localhost:5184/api/User/GetRanking',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ "city": $('#city').find(":selected").val(), "term": $('#term').val() }),
+                success: function (result) {
+                    let size = result.length;
+                    let totalPage = Math.ceil(size / pageSize);
+                    $('#pagination-container').twbsPagination({
+                        totalPages: totalPage,
+                        visiblePages: 8,
+                        onPageClick: function (event, page) {
+                            loadData(page);
+                        }
+                    });
+                }
+            });
+        }
+
+        $(document).on('change', '#city', function () {
+            $('#pagination-container').twbsPagination('destroy');
+            $('#pagination-container').remove();
+            $('#pag').html('<div id="pagination-container" class="d-flex justify-content-center"></div>');
+            loadData(1);
+        })
+        $(document).on('click', '.search-btn', function () {
+            $('#pagination-container').twbsPagination('destroy');
+            $('#pagination-container').remove();
+            $('#pag').html('<div id="pagination-container" class="d-flex justify-content-center"></div>'); 
+            loadData(1);
+        })
+    });
 </script>

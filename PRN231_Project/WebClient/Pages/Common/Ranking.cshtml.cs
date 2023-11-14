@@ -30,25 +30,6 @@ namespace WebClient.Pages.Common
                     Provinces = JsonConvert.DeserializeObject<List<Province>>(content);
                 }
             }
-            Players = await ApiHelper.GetRanking(null, null);
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPost(string? city, string? term)
-        {
-            City = city;
-            Term = term;
-            using (var httpClient = new HttpClient())
-            {
-                var response = await httpClient.GetAsync("https://provinces.open-api.vn/api/?depth=2");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    Provinces = JsonConvert.DeserializeObject<List<Province>>(content);
-                }
-            }
-            Players = await ApiHelper.GetRanking(city, term);
             return Page();
         }
     }

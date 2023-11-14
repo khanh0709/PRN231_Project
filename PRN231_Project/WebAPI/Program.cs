@@ -6,6 +6,7 @@ using System.Text;
 using WebAPI.Business.IRepository;
 using WebAPI.Business.Repository;
 using WebAPI.DataAccess.Models;
+using Microsoft.AspNetCore.OData;
 
 namespace WebAPI
 {
@@ -17,7 +18,14 @@ namespace WebAPI
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddOData(options => options
+                .Select()
+                .Filter()
+                .OrderBy()
+                .SetMaxTop(20)
+                .Count()
+                .Expand()
+            );
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
